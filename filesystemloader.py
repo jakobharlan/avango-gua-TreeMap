@@ -5,20 +5,20 @@ from os.path import join, getsize, isdir
 from folder import folder
 from file import file
 
-def walk(current):
-  for child in os.listdir(current.path):
-    full_path = join(current.path, child)
+def walk(path):
+  current_folder = folder(path)
+  for child in os.listdir(path):
+    full_path = join(path, child)
     if isdir(full_path):
-      new_folder = folder(full_path)
-      new_folder.children.append(walk(new_folder))
+      current_folder.children.append(walk(full_path))
     else:
-      new_file = file(full_path)
-
+      current_folder.children.append(file(full_path))
+  return current_folder
 
 def load(path):
   print "loading filesystem from " + path
-  root = folder(path)
-  walk(root)
+  root = walk(path)
+  root.print_structure()
 
   # for folder in os.walk(path):
   #   print folder
