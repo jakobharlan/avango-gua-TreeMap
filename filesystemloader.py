@@ -26,7 +26,7 @@ def load(path):
   print "loading filesystem from " + path
   root = walk(path)
   calc_folder_size(root)
-  root.print_structure()
+  # root.print_structure()
   return root
 
 def calc_folder_size(folder):
