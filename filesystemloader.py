@@ -5,15 +5,18 @@ from os.path import join, getsize, isdir
 from folder import folder
 from file import file
 
-def walk(path):
+def walk(path, depth = 0):
   current_folder = folder(path)
+  current_folder.depth = depth
   # current_folder.size = get_folder_size(current_folder.path)
   for child in os.listdir(path):
     full_path = join(path, child)
     if isdir(full_path):
-      current_folder.children.append(walk(full_path))
+      current_folder.children.append(walk(full_path, depth+1))
     else:
-      current_folder.children.append(file(full_path))
+      new_file = file(full_path)
+      new_file.depth = depth +1
+      current_folder.children.append(new_file)
   return current_folder
 
 def load(path):

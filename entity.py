@@ -15,6 +15,7 @@ class entity:
 		st = stat(path)
 		self.access_time = st[ST_ATIME]
 		self.modified_time = st[ST_MTIME]
+		self.depth = 0
 
 	def __str__(self):
 		return "member of"

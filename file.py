@@ -18,4 +18,4 @@ class file(entity):
 		string = self.path
 		for x in range(0, 100-len(self.path)):
 		 	string += "."
-		return string + "Size: " + str(self.size) + "   access-time: " + str(self.access_time) + "   modified-time: " + str(self.modified_time)
+		return string + "Size: " + str(self.size) + "   access-time: " + str(self.access_time) + "   modified-time: " + str(self.modified_time) + "   dEpth: " + str(self.depth)
