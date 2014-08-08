@@ -5,6 +5,7 @@ from treemap import Treemap
 import avango
 import avango.gua
 
+import examples_common.navigator
 from examples_common.GuaVE import GuaVE
 
 ## Parameters:
@@ -58,6 +59,15 @@ def viewing_setup_scene(graph):
 		EnableFPSDisplay = True
 	)
 
+	navigator = examples_common.navigator.Navigator()
+	navigator.StartLocation.value = screen.Transform.value.get_translate()
+	navigator.OutTransform.connect_from(screen.Transform)
+
+	navigator.RotationSpeed.value = 0.05
+	navigator.MotionSpeed.value = 0.07
+
+	screen.Transform.connect_from(navigator.OutTransform)
+
 	return pipe
 
 
@@ -74,29 +84,30 @@ def start():
 	TM = Treemap(root)
 	TM.create_scenegraph_structure()
 	graph.Root.value.Children.value.append(TM.root_node)
+	TM.layout()
 
 	pipe = viewing_setup_scene(graph)
 
 
-	# setup Reference
-	loader = avango.gua.nodes.TriMeshLoader()
-	reference_cubes = []
-	for i in range(4):
-		reference_cubes.append( loader.create_geometry_from_file(
-			"reference_cube",
-			"data/objects/cube.obj",
-			"data/materials/Red.gmd",
-			avango.gua.LoaderFlags.DEFAULTS,
-		))
+	# # setup Reference
+	# loader = avango.gua.nodes.TriMeshLoader()
+	# reference_cubes = []
+	# for i in range(4):
+	# 	reference_cubes.append( loader.create_geometry_from_file(
+	# 		"reference_cube",
+	# 		"data/objects/cube.obj",
+	# 		"data/materials/Red.gmd",
+	# 		avango.gua.LoaderFlags.DEFAULTS,
+	# 	))
 
-	reference_cubes[0].Transform.value = avango.gua.make_trans_mat(-0.5,-0.5 ,0) * avango.gua.make_scale_mat(0.1)
-	reference_cubes[1].Transform.value = avango.gua.make_trans_mat( 0.5,-0.5 ,0) * avango.gua.make_scale_mat(0.1)
-	reference_cubes[2].Transform.value = avango.gua.make_trans_mat(-0.5, 0.5 ,0) * avango.gua.make_scale_mat(0.1)
-	reference_cubes[3].Transform.value = avango.gua.make_trans_mat( 0.5, 0.5 ,0) * avango.gua.make_scale_mat(0.1)
-	graph.Root.value.Children.value.append(reference_cubes[0])
-	graph.Root.value.Children.value.append(reference_cubes[1])
-	graph.Root.value.Children.value.append(reference_cubes[2])
-	graph.Root.value.Children.value.append(reference_cubes[3])
+	# reference_cubes[0].Transform.value = avango.gua.make_trans_mat(-0.5,-0.5 ,0) * avango.gua.make_scale_mat(0.1)
+	# reference_cubes[1].Transform.value = avango.gua.make_trans_mat( 0.5,-0.5 ,0) * avango.gua.make_scale_mat(0.1)
+	# reference_cubes[2].Transform.value = avango.gua.make_trans_mat(-0.5, 0.5 ,0) * avango.gua.make_scale_mat(0.1)
+	# reference_cubes[3].Transform.value = avango.gua.make_trans_mat( 0.5, 0.5 ,0) * avango.gua.make_scale_mat(0.1)
+	# graph.Root.value.Children.value.append(reference_cubes[0])
+	# graph.Root.value.Children.value.append(reference_cubes[1])
+	# graph.Root.value.Children.value.append(reference_cubes[2])
+	# graph.Root.value.Children.value.append(reference_cubes[3])
 
 	# Light for the Treemap
 	sun = avango.gua.nodes.SunLightNode(
