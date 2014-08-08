@@ -12,10 +12,13 @@ def walk(path, depth = 0):
   for child in os.listdir(path):
     full_path = join(path, child)
     if isdir(full_path):
-      current_folder.children.append(walk(full_path, depth+1))
+      new_folder = walk(full_path, depth+1)
+      new_folder.parent = current_folder
+      current_folder.children.append(new_folder)
     else:
       new_file = file(full_path)
       new_file.depth = depth +1
+      new_file.parent = current_folder
       current_folder.children.append(new_file)
   return current_folder
 
