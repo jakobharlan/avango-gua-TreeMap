@@ -1,5 +1,8 @@
 #!/usr/bin/python
 
+from os import stat
+from stat import *
+
 class entity:
 	id_counter = 0
 
@@ -9,3 +12,9 @@ class entity:
 		entity.id_counter += 1
 		self.path = path
 		self.size = 0
+		st = stat(path)
+		self.access_time = st[ST_ATIME]
+		self.modified_time = st[ST_MTIME]
+
+	def __str__(self):
+		return "member of"
