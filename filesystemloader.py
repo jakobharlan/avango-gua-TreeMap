@@ -21,6 +21,7 @@ def load(path):
   root = walk(path)
   calc_folder_size(root)
   root.print_structure()
+  return root
 
 def calc_folder_size(folder):
   folder_size = 0

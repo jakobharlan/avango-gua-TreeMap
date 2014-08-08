@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import filesystemloader
+from treemap import Treemap
 
 import avango
 import avango.gua
@@ -69,7 +70,8 @@ def start():
 	)
 
 	## Setup visualization-------------------
-	filesystemloader.load("/opt/sublime_text")
+	root = filesystemloader.load("/opt/sublime_text")
+	TM = Treemap(root)
 
 	pipe = viewing_setup_scene(graph)
 
