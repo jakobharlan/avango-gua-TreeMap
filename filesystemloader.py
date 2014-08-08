@@ -7,7 +7,7 @@ from file import file
 
 def walk(path):
   current_folder = folder(path)
-  current_folder.size = get_folder_size(current_folder.path)
+  # current_folder.size = get_folder_size(current_folder.path)
   for child in os.listdir(path):
     full_path = join(path, child)
     if isdir(full_path):
@@ -19,20 +19,15 @@ def walk(path):
 def load(path):
   print "loading filesystem from " + path
   root = walk(path)
-  
+  calc_folder_size(root)
   root.print_structure()
 
-def get_folder_size(path):
+def calc_folder_size(folder):
   folder_size = 0
-  for child in os.listdir(path):
-    full_path = join(path, child)
-    if isdir(full_path):
-      folder_size += get_folder_size(full_path)
+  for child in folder.children:
+    if isdir(child.path):
+      folder_size += calc_folder_size(child)
     else:
-      folder_size += getsize(full_path)
+      folder_size += getsize(child.path)
+  folder.size = folder_size
   return folder_size
-
-  # for folder in os.walk(path):
-  #   print folder
-  #   print getsize(folder[0])
-
