@@ -72,6 +72,8 @@ def start():
 	## Setup visualization-------------------
 	root = filesystemloader.load("/opt/sublime_text")
 	TM = Treemap(root)
+	TM.create_scenegraph_structure()
+	graph.Root.value.Children.value.append(TM.root_node)
 
 	pipe = viewing_setup_scene(graph)
 
