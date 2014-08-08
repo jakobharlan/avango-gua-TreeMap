@@ -100,10 +100,10 @@ def start():
 	# 		avango.gua.LoaderFlags.DEFAULTS,
 	# 	))
 
-	# reference_cubes[0].Transform.value = avango.gua.make_trans_mat(-0.5,-0.5 ,0) * avango.gua.make_scale_mat(0.1)
-	# reference_cubes[1].Transform.value = avango.gua.make_trans_mat( 0.5,-0.5 ,0) * avango.gua.make_scale_mat(0.1)
-	# reference_cubes[2].Transform.value = avango.gua.make_trans_mat(-0.5, 0.5 ,0) * avango.gua.make_scale_mat(0.1)
-	# reference_cubes[3].Transform.value = avango.gua.make_trans_mat( 0.5, 0.5 ,0) * avango.gua.make_scale_mat(0.1)
+	# reference_cubes[0].Transform.value = avango.gua.make_trans_mat(-0.5, 0 , -0.5) * avango.gua.make_scale_mat(0.11)
+	# reference_cubes[1].Transform.value = avango.gua.make_trans_mat( 0.5, 0 , -0.5) * avango.gua.make_scale_mat(0.11)
+	# reference_cubes[2].Transform.value = avango.gua.make_trans_mat(-0.5, 0 ,  0.5) * avango.gua.make_scale_mat(0.11)
+	# reference_cubes[3].Transform.value = avango.gua.make_trans_mat( 0.5, 0 ,  0.5) * avango.gua.make_scale_mat(0.11)
 	# graph.Root.value.Children.value.append(reference_cubes[0])
 	# graph.Root.value.Children.value.append(reference_cubes[1])
 	# graph.Root.value.Children.value.append(reference_cubes[2])
@@ -127,6 +127,29 @@ def start():
 	viewer.SceneGraphs.value = [graph]
 
 	viewer.run()
+
+
+def printscenegraph(scenegraph):
+  for node in scenegraph.Root.value.Children.value:
+    printhelper(node)
+
+def printhelper(node):
+  stack = []
+  stack.append((node,0))
+
+  while stack:
+    tmp = stack.pop()
+    printelement(tmp)
+    for child in tmp[0].Children.value:
+      stack.append((child,tmp[1]+1))
+
+def printelement(nodetupel):
+  for i in range(0, nodetupel[1]):
+    print(" "),
+  print nodetupel[0].Name.value + "   "
+  #print nodetupel[0]
+  #print nodetupel[0].Transform.value
+
 
 if __name__ == '__main__':
 	start()
