@@ -78,6 +78,8 @@ def start():
 	eye.Children.value.append(pick_ray)
 	TM_Picker.Ray.value = pick_ray
 
+	navigator.controller2D.Picker = TM_Picker
+
 	# # setup Reference
 	# loader = avango.gua.nodes.TriMeshLoader()
 	# reference_cubes = []

@@ -12,6 +12,7 @@ class Controller2D(avango.script.Script):
 	Speed = avango.SFFloat()
 	Mouse = device.MouseDevice()
 	Keyboard = device.KeyboardDevice()
+	Picker = None
 
 
 	def __init__(self):
@@ -23,10 +24,16 @@ class Controller2D(avango.script.Script):
 		self.zoomspeed = 0.1
 
 	def evaluate(self):
-		# print self.zoom
+		distance = 100
 		MovementX = 0
 		MovementZ = 0
 
+		print self.zoom
+
+		if len(self.Picker.Results.value) > 0:
+			print self.Picker.Results.value[0].Distance.value
+			distance = self.Picker.Results.value[0].Distance.value
+			
 		if self.Keyboard.KeyW.value:
 			MovementZ = -1 * self.Speed.value
 		if self.Keyboard.KeyA.value:
@@ -41,7 +48,8 @@ class Controller2D(avango.script.Script):
 		if self.Keyboard.KeyQ.value:
 			self.zoom += ( 1 * self.zoomspeed )
 		if self.Keyboard.KeyE.value:
-			self.zoom -= ( 1 * self.zoomspeed )
+			if distance > 0.1:
+				self.zoom -= ( 1 * self.zoomspeed )
 
 		positionx = self.Position.value.x
 		positionz = self.Position.value.z

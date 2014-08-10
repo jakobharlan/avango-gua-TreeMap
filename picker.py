@@ -32,6 +32,7 @@ class Picker(avango.script.Script):
     if len(self.Results.value) > 0:
       node = self.Results.value[0].Object.value
       self.treemap.focus(node)
+      print self.Results.value[0].Distance.value
 
   def evaluate(self):
     results = self.PickedSceneGraph.value.ray_test(self.Ray.value,

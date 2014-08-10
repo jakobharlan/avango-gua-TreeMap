@@ -24,6 +24,7 @@ class Navigator(avango.script.Script):
 		self.always_evaluate(True)
 		self.OutTransform.connect_from(self.controller2D.OutTransform)
 		self.KeySTRG = False
+		
 
 	@field_has_changed(Is_overview_modus)
 	def update_mode(self):
