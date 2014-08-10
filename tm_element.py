@@ -33,7 +33,6 @@ class TM_Element():
 
 	def select_material(self):
 		mimetype = mimetypes.guess_type(self.input_entity.path)[0]
-		print mimetype
 
 		if self.input_entity.__class__ == folder:
 			return "data/materials/Grey.gmd"

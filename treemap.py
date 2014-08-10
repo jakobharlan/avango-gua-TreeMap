@@ -27,14 +27,16 @@ class Treemap():
 				offset = 0.0
 				current_parent = current.input_entity.parent
 
-			scale = float(current.input_entity.size) / current.input_entity.parent.size
+			scale = 0.0
+			if not current.input_entity.parent.size == 0:
+				scale = float(current.input_entity.size) / current.input_entity.parent.size
 			position = -0.5 + (scale/2) + offset
 			offset += scale
 
 			if current.input_entity.depth % 2 == 0:
-				current.geometry.Transform.value = avango.gua.make_trans_mat(position, 0.3, 0) * avango.gua.make_scale_mat(scale * 0.95, 0.95, 0.95)
+				current.geometry.Transform.value = avango.gua.make_trans_mat(position, 1.0, 0) * avango.gua.make_scale_mat(scale * 0.95, 0.95, 0.95)
 			else:
-				current.geometry.Transform.value = avango.gua.make_trans_mat(0, 0.3, position) * avango.gua.make_scale_mat(0.95, 0.95, scale * 0.95)
+				current.geometry.Transform.value = avango.gua.make_trans_mat(0, 1.0, position) * avango.gua.make_scale_mat(0.95, 0.95, scale * 0.95)
 
 			entities.extend(current.children)
 
