@@ -28,11 +28,10 @@ class Controller2D(avango.script.Script):
 		MovementX = 0
 		MovementZ = 0
 
-		print self.zoom
-
 		if len(self.Picker.Results.value) > 0:
-			print self.Picker.Results.value[0].Distance.value
 			distance = self.Picker.Results.value[0].Distance.value
+		else:
+			distance = None
 			
 		if self.Keyboard.KeyW.value:
 			MovementZ = -1 * self.Speed.value
@@ -43,17 +42,31 @@ class Controller2D(avango.script.Script):
 		if self.Keyboard.KeyD.value:
 			MovementX += 1 * self.Speed.value
 
-		self.Position.value += avango.gua.Vec3(MovementX, 0, MovementZ)
+		if not distance == None:
+			if distance < 1:
+				self.Position.value += avango.gua.Vec3(MovementX * distance, 0, MovementZ * distance)
+			else:
+				self.Position.value += avango.gua.Vec3(MovementX , 0, MovementZ)
 
 		if self.Keyboard.KeyQ.value:
-			self.zoom += ( 1 * self.zoomspeed )
+			if not distance == None:
+				if distance < 1:
+					self.zoom += ( 1 * distance * self.zoomspeed )
+				else:
+					self.zoom += ( 1 * self.zoomspeed )
+
 		if self.Keyboard.KeyE.value:
-			if distance > 0.1:
+			if distance == None:												#allow zoom if too far away
 				self.zoom -= ( 1 * self.zoomspeed )
+			elif distance > 0.1:												#stop zoom if to close
+				self.zoom -= ( 1 * distance * self.zoomspeed )
 
 		positionx = self.Position.value.x
 		positionz = self.Position.value.z
 		self.Position.value = avango.gua.Vec3(positionx, self.zoom, positionz)
 
-
-		self.OutTransform.value = avango.gua.make_trans_mat(self.Position.value) * avango.gua.make_rot_mat(-90, 1, 0, 0)
+		if (	self.Position.value.x < 0.5 and
+					self.Position.value.x > -0.5 and
+					self.Position.value.z < 0.5 and
+					self.Position.value.z > -0.5):
+			self.OutTransform.value = avango.gua.make_trans_mat(self.Position.value) * avango.gua.make_rot_mat(-90, 1, 0, 0)
