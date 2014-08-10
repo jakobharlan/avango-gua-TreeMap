@@ -3,17 +3,23 @@
 from tm_element import TM_Element
 import avango
 import avango.gua
+import avango.script
 
-class Treemap():
+class Treemap(avango.script.Script):
+	Focuspath = avango.SFString()
+	Focuspath.value = ""
 
-	def __init__(self, root):
+	def __init__(self):
+		self.super(Treemap).__init__()
+		avango.gua.load_materials_from("data/materials")
+
+	def my_constructor(self, root):
 		self.root = TM_Element(root)
 		self.root_node = avango.gua.nodes.TransformNode(
 			Name = "TreeMapRoot",
 			Transform = avango.gua.make_scale_mat(1, 0.02, 1)
 		)
 		self.focus_element = self.root
-		avango.gua.load_materials_from("data/materials")
 
 	def layout(self):
 		entities = []
@@ -58,6 +64,7 @@ class Treemap():
 
 				self.focus_element = current
 				self.focus_element.highlight(True)
+				self.Focuspath.value = self.focus_element.input_entity.path
 				return True
 			for child in current.children:
 				elements.append(child)

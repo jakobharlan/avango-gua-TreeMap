@@ -3,6 +3,7 @@ import filesystemloader
 from treemap import Treemap
 from controller import Navigator
 from picker import Picker
+from Text import TextField
 
 import avango
 import avango.gua
@@ -60,10 +61,19 @@ def start():
 
 	## Setup visualization-------------------
 	root = filesystemloader.load(sys.argv[1])
-	TM = Treemap(root)
+	TM = Treemap()
+	TM.my_constructor(root)
 	TM.create_scenegraph_structure()
 	graph.Root.value.Children.value.append(TM.root_node)
 	TM.layout()
+
+	## Setup Text
+	text = TextField()
+	text_transform = avango.gua.nodes.TransformNode( Name = "text_transform",
+												 Transform = avango.gua.make_trans_mat(-0.8, -0.4, 0) * avango.gua.make_scale_mat(0.03))
+	screen.Children.value.append(text_transform)
+	text.my_constructor(text_transform)
+	text.sf_text.connect_from(TM.Focuspath)
 
 	## Setup Controllers
 	navigator = Navigator()
