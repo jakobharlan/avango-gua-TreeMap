@@ -9,9 +9,10 @@ class Treemap():
 	def __init__(self, root):
 		self.root = TM_Element(root)
 		self.root_node = avango.gua.nodes.TransformNode(
-      Name = "TreeMapRoot",
-      Transform = avango.gua.make_scale_mat(1, 0.02, 1)
-    )
+			Name = "TreeMapRoot",
+			Transform = avango.gua.make_scale_mat(1, 0.02, 1)
+		)
+		avango.gua.load_materials_from("data/materials")
 
 	def layout(self):
 		entities = []
@@ -40,7 +41,24 @@ class Treemap():
 
 			entities.extend(current.children)
 
+	def focus(self, selector):
+		elements = []
+		elements.append(self.root)
 
+		# search for the selector
+		while (not len(elements) == 0):
+			current = elements.pop()
+			# when found set highlighted
+			if(   current.input_entity == selector
+			   or current.input_entity.id == selector
+			   or current.input_entity.path == selector
+			   or current.geometry == selector):
+
+				current.geometry.Material.value = "data/materials/White.gmd"
+				return True
+			for child in current.children:
+				elements.append(child)
+		return False
 
 	def create_scenegraph_structure(self):
 		self.root_node.Children.value.append(self.root.create_scenegraph_structure())
