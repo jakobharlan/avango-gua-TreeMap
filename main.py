@@ -5,7 +5,7 @@ from controller import Navigator
 
 import avango
 import avango.gua
-
+import sys
 from examples_common.GuaVE import GuaVE
 
 ## Parameters:
@@ -68,7 +68,7 @@ def start():
 	)
 
 	## Setup visualization-------------------
-	root = filesystemloader.load("/opt/sublime_text")
+	root = filesystemloader.load(sys.argv[1])
 	TM = Treemap(root)
 	TM.create_scenegraph_structure()
 	graph.Root.value.Children.value.append(TM.root_node)

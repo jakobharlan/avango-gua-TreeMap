@@ -37,7 +37,7 @@ killall python2
 "./daemon.py" > /dev/null &
 
 # run program
-cd "$DIR" && ./main.py
+cd "$DIR" && ./main.py $1
 
 # kill daemon
 kill %1
