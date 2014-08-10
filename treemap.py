@@ -12,6 +12,7 @@ class Treemap():
 			Name = "TreeMapRoot",
 			Transform = avango.gua.make_scale_mat(1, 0.02, 1)
 		)
+		self.focus_element = self.root
 		avango.gua.load_materials_from("data/materials")
 
 	def layout(self):
@@ -42,6 +43,7 @@ class Treemap():
 			entities.extend(current.children)
 
 	def focus(self, selector):
+		self.focus_element.highlight(False)
 		elements = []
 		elements.append(self.root)
 
@@ -54,7 +56,8 @@ class Treemap():
 			   or current.input_entity.path == selector
 			   or current.geometry == selector):
 
-				current.geometry.Material.value = "data/materials/White.gmd"
+				self.focus_element = current
+				self.focus_element.highlight(True)
 				return True
 			for child in current.children:
 				elements.append(child)
