@@ -31,6 +31,12 @@ class TM_Element():
 			self.geometry.Children.value.append( child.create_scenegraph_structure() )
 		return self.geometry
 
+	def highlight(self, highlight):
+		if highlight:
+			self.geometry.Material.value = "data/materials/White.gmd"
+		else:
+			self.geometry.Material.value = self.material
+
 	def select_material(self):
 		mimetype = mimetypes.guess_type(self.input_entity.path)[0]
 
