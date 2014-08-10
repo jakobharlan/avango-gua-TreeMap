@@ -39,14 +39,13 @@ class Controller2D(avango.script.Script):
 		self.Position.value += avango.gua.Vec3(MovementX, 0, MovementZ)
 
 		if self.Keyboard.KeyQ.value:
-			self.zoom += ( 1 * self.zoomspeed ) 
+			self.zoom += ( 1 * self.zoomspeed )
 		if self.Keyboard.KeyE.value:
 			self.zoom -= ( 1 * self.zoomspeed )
-			
+
 		positionx = self.Position.value.x
 		positionz = self.Position.value.z
 		self.Position.value = avango.gua.Vec3(positionx, self.zoom, positionz)
 
-		print self.zoom
 
 		self.OutTransform.value = avango.gua.make_trans_mat(self.Position.value) * avango.gua.make_rot_mat(-90, 1, 0, 0)
