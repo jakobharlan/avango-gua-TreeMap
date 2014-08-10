@@ -10,7 +10,7 @@ class Treemap():
 		self.root = TM_Element(root)
 		self.root_node = avango.gua.nodes.TransformNode(
       Name = "TreeMapRoot",
-      Transform = avango.gua.make_scale_mat(1, 0.02, 1) * avango.gua.make_scale_mat(10, 10, 10)
+      Transform = avango.gua.make_scale_mat(1, 0.02, 1)
     )
 
 	def layout(self):

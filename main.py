@@ -48,13 +48,7 @@ def viewing_setup_scene(graph):
 		Camera = camera,
 		Window = window,
 		EnableSsao = True,
-		SsaoIntensity = 2.0,
-		EnableBloom = True,
-		BloomThreshold = 0.8,
-		BloomRadius = 10.0,
-		BloomIntensity = 0.8,
-		EnableHDR = True,
-		HDRKey = 5,
+		SsaoIntensity = 1.0,
 		LeftResolution = size,
 		EnableFPSDisplay = True
 	)
@@ -107,7 +101,7 @@ def start():
 	sun = avango.gua.nodes.SunLightNode(
 		Name = "sun",
 		Color = avango.gua.Color(1, 1, 1),
-		Transform = avango.gua.make_rot_mat(-80, 1, 0, 0)
+		Transform = avango.gua.make_rot_mat(-45, 1, 0, 0)
 	)
 
 	graph.Root.value.Children.value.append(sun)
