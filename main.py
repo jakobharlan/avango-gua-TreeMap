@@ -83,10 +83,12 @@ def start():
 	TM_Picker.myConstructor(TM)
 	TM_Picker.PickedSceneGraph.value = graph
 	pick_ray = avango.gua.nodes.RayNode(Name = "pick_ray")
-	pick_ray.Transform.value = avango.gua.make_trans_mat(0.0, -0.02, 0.0) * \
-														 avango.gua.make_scale_mat(0.03, 0.03, 5)
+	pick_ray.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0) * \
+														 avango.gua.make_scale_mat(0.01, 0.01, 5)
 	eye.Children.value.append(pick_ray)
 	TM_Picker.Ray.value = pick_ray
+
+	navigator.controller2D.Picker = TM_Picker
 
 	# # setup Reference
 	# loader = avango.gua.nodes.TriMeshLoader()
