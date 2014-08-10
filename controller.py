@@ -2,32 +2,39 @@
 
 import avango.script
 from avango.script import field_has_changed
+from controller2D import Controller2D
+from controller3D import Controller3D
+import device
 
 import avango.gua
 
-import device
 
 class Navigator(avango.script.Script):
+	Is_overview_modus = avango.SFBool()
+	Is_overview_modus.value = True
+	controller2D = Controller2D()
+	controller3D = Controller3D()	
+	OutTransform = avango.gua.SFMatrix4()
+	OutTransform.value = avango.gua.make_identity_mat()
+	Keyboard = device.KeyboardDevice()
 
-  OutTransform = avango.gua.SFMatrix4()
-  OutTransform.value = avango.gua.make_identity_mat()
-  Position = avango.gua.SFVec3()
-  Speed = avango.SFFloat()
-  Mouse = device.MouseDevice()
-  # Keyboard = device.KeyboardDevice()
 
-  def __init__(self):
-	self.super(Navigator).__init__()
-	self.always_evaluate(True)
-	self.Position.value = avango.gua.Vec3(0, 1, 0)
-	self.Speed.value = 0.001
-	self.MovementX = 0
-	self.MovementY = 0
+	def __init__(self):
+		self.super(Navigator).__init__()
+		self.always_evaluate(True)
+		self.OutTransform.connect_from(self.controller2D.OutTransform)
+		self.KeySTRG = False
 
-  def evaluate(self):
+	@field_has_changed(Is_overview_modus)
+	def update_mode(self):
+		if self.Is_overview_modus.value:
+			self.OutTransform.disconnect_from(self.controller3D.OutTransform)
+			self.OutTransform.connect_from(self.controller2D.OutTransform)
+		else:
+			self.OutTransform.disconnect_from(self.controller2D.OutTransform)
+			self.OutTransform.connect_from(self.controller3D.OutTransform)
 
-	self.MovementX = self.Mouse.RelX.value * self.Speed.value
-	self.MovementY = self.Mouse.RelY.value * self.Speed.value
-	self.Position.value += avango.gua.Vec3(self.MovementX, 0, self.MovementY)
-	self.OutTransform.value = avango.gua.make_trans_mat(self.Position.value) * avango.gua.make_rot_mat(-90, 1, 0, 0)
-
+	def evaluate(self):
+		if self.Keyboard.KeySTRG.value and not self.KeySTRG:
+			self.Is_overview_modus.value = not self.Is_overview_modus.value
+		self.KeySTRG = self.Keyboard.KeySTRG.value

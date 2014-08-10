@@ -70,7 +70,7 @@ def init_keyboard():
 		keyboard.buttons[24] = "EV_KEY::KEY_N"
 		keyboard.buttons[25] = "EV_KEY::KEY_M"
 
-		keyboard.buttons[26] = "EV_KEY::KEY_PAGEUP"
+		keyboard.buttons[26] = "EV_KEY::KEY_LEFTCTRL"
 		keyboard.buttons[27] = "EV_KEY::KEY_PAGEDOWN"
 
 		keyboard.buttons[28] = "EV_KEY::KEY_1"
