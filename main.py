@@ -1,11 +1,11 @@
 #!/usr/bin/python
 import filesystemloader
 from treemap import Treemap
+from controller import Navigator
 
 import avango
 import avango.gua
 
-import examples_common.navigator
 from examples_common.GuaVE import GuaVE
 
 ## Parameters:
@@ -59,13 +59,7 @@ def viewing_setup_scene(graph):
 		EnableFPSDisplay = True
 	)
 
-	navigator = examples_common.navigator.Navigator()
-	navigator.StartLocation.value = screen.Transform.value.get_translate()
-	navigator.OutTransform.connect_from(screen.Transform)
-
-	navigator.RotationSpeed.value = 0.05
-	navigator.MotionSpeed.value = 0.07
-
+	navigator = Navigator()
 	screen.Transform.connect_from(navigator.OutTransform)
 
 	return pipe
