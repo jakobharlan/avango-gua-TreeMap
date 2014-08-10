@@ -5,7 +5,7 @@ from controller import Navigator
 
 import avango
 import avango.gua
-
+import sys
 from examples_common.GuaVE import GuaVE
 
 ## Parameters:
