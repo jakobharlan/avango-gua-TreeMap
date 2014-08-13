@@ -43,9 +43,9 @@ class Treemap(avango.script.Script):
 			offset += scale
 
 			if current.input_entity.depth % 2 == 0:
-				current.geometry.Transform.value = avango.gua.make_trans_mat(position, 1.0, 0) * avango.gua.make_scale_mat(scale * 0.95, 0.95, 0.95)
+				current.geometry.Transform.value = avango.gua.make_trans_mat(position, 1.0, 0) * avango.gua.make_scale_mat(scale * 0.97, 0.97, 0.97)
 			else:
-				current.geometry.Transform.value = avango.gua.make_trans_mat(0, 1.0, position) * avango.gua.make_scale_mat(0.95, 0.95, scale * 0.95)
+				current.geometry.Transform.value = avango.gua.make_trans_mat(0, 1.0, position) * avango.gua.make_scale_mat(0.97, 0.97, scale * 0.97)
 
 			entities.extend(current.children)
 

@@ -53,7 +53,7 @@ def start():
 		Camera = camera,
 		Window = window,
 		EnableSsao = True,
-		SsaoIntensity = 1.0,
+		SsaoIntensity = 0.5,
 		LeftResolution = size,
 		EnableRayDisplay = True,
 		EnableFPSDisplay = True
