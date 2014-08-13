@@ -21,6 +21,21 @@ class Treemap(avango.script.Script):
 			Transform = avango.gua.make_scale_mat(1, 0.02, 1)
 		)
 		self.focus_element = self.root
+		self.init_dict()
+
+	def init_dict(self):
+		elements = []
+		self.elementdict = {}
+		elements.append(self.root)
+
+		# search for the selector
+		while (not len(elements) == 0):
+			current = elements.pop()
+			self.elementdict[current.geometry.Name.value] = current
+			for child in current.children:
+				elements.append(child)
+
+
 
 	def layout(self):
 		entities = []
@@ -51,25 +66,11 @@ class Treemap(avango.script.Script):
 
 	def focus(self, selector):
 		self.focus_element.highlight(False)
-		elements = []
-		elements.append(self.root)
+		self.focus_element = self.elementdict[selector.Name.value]
+		self.focus_element.highlight(True)
+		self.Focuspath.value = self.focus_element.input_entity.path
 
-		# search for the selector
-		while (not len(elements) == 0):
-			current = elements.pop()
-			# when found set highlighted
-			if(   current.input_entity == selector
-			   or current.input_entity.id == selector
-			   or current.input_entity.path == selector
-			   or current.geometry == selector):
 
-				self.focus_element = current
-				self.focus_element.highlight(True)
-				self.Focuspath.value = self.focus_element.input_entity.path
-				return True
-			for child in current.children:
-				elements.append(child)
-		return False
 
 	def create_scenegraph_structure(self):
 		self.root_node.Children.value.append(self.root.create_scenegraph_structure())
