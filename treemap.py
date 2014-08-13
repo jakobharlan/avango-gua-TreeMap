@@ -12,6 +12,7 @@ class Treemap(avango.script.Script):
 	def __init__(self):
 		self.super(Treemap).__init__()
 		avango.gua.load_materials_from("data/materials")
+		avango.gua.load_materials_from("data/materials/font")
 
 	def my_constructor(self, root):
 		self.root = TM_Element(root)

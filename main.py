@@ -114,7 +114,8 @@ def start():
 	sun = avango.gua.nodes.SunLightNode(
 		Name = "sun",
 		Color = avango.gua.Color(1, 1, 1),
-		Transform = avango.gua.make_rot_mat(-45, 1, 0, 0)
+		Transform = avango.gua.make_rot_mat(-45, 1, 0, 0),
+		EnableShadows = False
 	)
 
 	graph.Root.value.Children.value.append(sun)

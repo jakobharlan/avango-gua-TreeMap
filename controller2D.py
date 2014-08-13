@@ -32,7 +32,7 @@ class Controller2D(avango.script.Script):
 			distance = self.Picker.Results.value[0].Distance.value
 		else:
 			distance = None
-			
+
 		if self.Keyboard.KeyW.value:
 			MovementZ = -1 * self.Speed.value
 		if self.Keyboard.KeyA.value:
@@ -58,7 +58,7 @@ class Controller2D(avango.script.Script):
 		if self.Keyboard.KeyE.value:
 			if distance == None:												#allow zoom if too far away
 				self.zoom -= ( 1 * self.zoomspeed )
-			elif distance > 0.1:												#stop zoom if to close
+			elif distance > 0.04:												#stop zoom if to close
 				self.zoom -= ( 1 * distance * self.zoomspeed )
 
 		positionx = self.Position.value.x
