@@ -19,7 +19,7 @@ class TM_Element():
 		loader = avango.gua.nodes.TriMeshLoader()
 
 		self.geometry = loader.create_geometry_from_file(
-			"cube",
+			"cube" + str(self.input_entity.id),
 			"data/objects/cube.obj",
 			self.material,
 			avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.MAKE_PICKABLE,
@@ -39,9 +39,8 @@ class TM_Element():
 
 	def select_material(self):
 		mimetype = mimetypes.guess_type(self.input_entity.path)[0]
-
 		if self.input_entity.__class__ == folder:
-			return "data/materials/Grey.gmd"
+			return "data/materials/Orange.gmd"
 
 		elif not mimetype == None:
 
@@ -49,5 +48,7 @@ class TM_Element():
 				return "data/materials/Blue.gmd"
 			elif mimetype.startswith("image"):
 				return "data/materials/Red.gmd"
+			elif mimetype.startswith("application"):
+				return "data/materials/Yellow.gmd"
 
-		return "data/materials/Cyan.gmd"
+		return "data/materials/Grey.gmd"
