@@ -70,8 +70,9 @@ def start():
 	## Setup Text
 	text = TextField()
 	text_transform = avango.gua.nodes.TransformNode( Name = "text_transform",
-												 Transform = avango.gua.make_trans_mat(-0.8, -0.4, 0) * avango.gua.make_scale_mat(0.03))
-	screen.Children.value.append(text_transform)
+												 # Transform = avango.gua.make_trans_mat(0.1 * (-0.8 / 2.5), 0.1 *(-0.4 / 2.5), -0.1) * avango.gua.make_scale_mat(0.03 * 0.1/2.5))
+												 Transform = avango.gua.make_trans_mat(0.1 * (-0.8 / 2.5),  0.1 *(-0.42 / 2.5), -0.101) * avango.gua.make_scale_mat(0.02 * 0.1/2.5) )
+	eye.Children.value.append(text_transform)
 	text.my_constructor(text_transform)
 	text.sf_text.connect_from(TM.Focuspath)
 
