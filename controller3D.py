@@ -57,7 +57,6 @@ class Controller3D(avango.script.Script):
 
       self.__rot_x -= self.__rel_rot_x.value
       self.__rot_y -= self.__rel_rot_y.value
-
       rotation = avango.gua.make_rot_mat(self.__rot_y * self.RotationSpeed.value, 0.0, 1.0, 0.0 ) * \
                  avango.gua.make_rot_mat(self.__rot_x * self.RotationSpeed.value, 1.0, 0.0, 0.0)
 

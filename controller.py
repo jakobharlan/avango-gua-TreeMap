@@ -13,7 +13,7 @@ class Navigator(avango.script.Script):
 	Is_overview_modus = avango.SFBool()
 	Is_overview_modus.value = True
 	controller2D = Controller2D()
-	controller3D = Controller3D()	
+	controller3D = Controller3D()
 	OutTransform = avango.gua.SFMatrix4()
 	OutTransform.value = avango.gua.make_identity_mat()
 	Keyboard = device.KeyboardDevice()
@@ -24,7 +24,7 @@ class Navigator(avango.script.Script):
 		self.always_evaluate(True)
 		self.OutTransform.connect_from(self.controller2D.OutTransform)
 		self.KeySTRG = False
-		
+
 
 	@field_has_changed(Is_overview_modus)
 	def update_mode(self):
@@ -33,6 +33,7 @@ class Navigator(avango.script.Script):
 			self.OutTransform.connect_from(self.controller2D.OutTransform)
 		else:
 			self.OutTransform.disconnect_from(self.controller2D.OutTransform)
+			self.controller3D.StartLocation.value = avango.gua.make_identity_mat().get_translate()
 			self.OutTransform.connect_from(self.controller3D.OutTransform)
 
 	def evaluate(self):

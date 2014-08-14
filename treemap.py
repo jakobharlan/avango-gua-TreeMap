@@ -50,13 +50,12 @@ class Treemap(avango.script.Script):
 
 	def layout(self	):
 		elements = []
-		elements.extend(self.root.children)
+		elements.append(self.root)
 		current_parent = None
 		offset = 0.0
 
 		while not len(elements) == 0:
 			current = elements[0]
-			print current.input_entity.id
 			elements.remove(current)
 
 			if not current.parent == current_parent:
@@ -64,18 +63,20 @@ class Treemap(avango.script.Script):
 				current_parent = current.parent
 
 			scale = 0.0
-			if not current.input_entity.parent.size == 0:
+			if current_parent == None:
+				scale = 1.0
+			elif not current.input_entity.parent.size == 0:
 				scale = float(current.input_entity.size) / current.input_entity.parent.size
 			position = -0.5 + (scale/2) + offset
 			offset += scale
 
-			# Thrid Dimension layout
-			height_offset = current_parent.height
+			height_offset = current.height / 2
 
 			if current.input_entity.depth % 2 == 0:
-				current.transform.Transform.value = avango.gua.make_trans_mat(position, 1.0  , 0) * avango.gua.make_scale_mat(scale * 0.97, 1.0, 0.97)
+				current.transform.Transform.value = avango.gua.make_trans_mat(position, height_offset  , 0) * avango.gua.make_scale_mat(scale * 0.97, 1.0, 0.97)
 			else:
-				current.transform.Transform.value = avango.gua.make_trans_mat(0, 1.0 , position) * avango.gua.make_scale_mat(0.97, 1.0, scale * 0.97)
+				current.transform.Transform.value = avango.gua.make_trans_mat(0, height_offset , position) * avango.gua.make_scale_mat(0.97, 1.0, scale * 0.97)
+			current.geometry.Transform.value =  avango.gua.make_scale_mat(1, current.height, 1)
 
 			elements.extend(current.children)
 

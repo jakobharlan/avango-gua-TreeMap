@@ -70,6 +70,7 @@ def start():
 	TM.my_constructor(root)
 	TM.create_scenegraph_structure()
 	graph.Root.value.Children.value.append(TM.root_node)
+	graph.update_cache()
 	TM.layout()
 
 	## Setup Text
