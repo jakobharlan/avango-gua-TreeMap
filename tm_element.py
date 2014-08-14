@@ -26,7 +26,7 @@ class TM_Element():
 			avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.MAKE_PICKABLE,
 		)
 
-		self.height = 1.0
+		self.height = 0.0
 
 	def create_scenegraph_structure(self):
 		for child in self.children:
@@ -39,6 +39,15 @@ class TM_Element():
 			self.geometry.Material.value = "data/materials/White.gmd"
 		else:
 			self.geometry.Material.value = self.material
+
+	def set_height(self, min_max):
+		if self.input_entity.__class__ == folder:
+			self.height = 1.0
+		else:
+			absolute = self.input_entity.access_time - min_max[0]
+			relative = float(absolute) / (min_max[1] - min_max[0])
+			self.height =  relative * 20
+
 
 	def select_material(self):
 		mimetype = mimetypes.guess_type(self.input_entity.path)[0]

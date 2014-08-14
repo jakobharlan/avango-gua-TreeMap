@@ -22,7 +22,7 @@ class Treemap(avango.script.Script):
 		)
 		self.focus_element = self.root
 		self.init_dict()
-		self.init_third_dim()
+		self.min_max = self.init_third_dim()
 
 	def init_dict(self):
 		elements = []
@@ -37,16 +37,19 @@ class Treemap(avango.script.Script):
 				elements.append(child)
 
 	def init_third_dim(self):
-		entities = []
-		entities.extend(self.root.children)
-		max_value = 0.0
-		min_value = 0.0
+		elements = []
+		elements.extend(self.root.children)
+		max_value = self.root.input_entity.access_time
+		min_value = self.root.input_entity.access_time
 
-		while not len(entities) == 0:
-			current = entities[0]
-			entities.remove(current)
+		while not len(elements) == 0:
+			current = elements[0]
+			max_value = max(max_value, current.input_entity.access_time)
+			min_value = min(min_value, current.input_entity.access_time)
+			elements.remove(current)
+			elements.extend(current.children)
 
-		entities.extend(current.children)
+		return min_value, max_value
 
 	def layout(self	):
 		elements = []
@@ -57,6 +60,8 @@ class Treemap(avango.script.Script):
 		while not len(elements) == 0:
 			current = elements[0]
 			elements.remove(current)
+
+			current.set_height(self.min_max)
 
 			if not current.parent == current_parent:
 				offset = 0.0
