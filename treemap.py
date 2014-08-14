@@ -22,6 +22,7 @@ class Treemap(avango.script.Script):
 		)
 		self.focus_element = self.root
 		self.init_dict()
+		self.init_third_dim()
 
 	def init_dict(self):
 		elements = []
@@ -35,21 +36,32 @@ class Treemap(avango.script.Script):
 			for child in current.children:
 				elements.append(child)
 
-
-
-	def layout(self):
+	def init_third_dim(self):
 		entities = []
 		entities.extend(self.root.children)
-		current_parent = None
-		offset = 0.0
+		max_value = 0.0
+		min_value = 0.0
 
 		while not len(entities) == 0:
 			current = entities[0]
 			entities.remove(current)
 
-			if not current.input_entity.parent == current_parent:
+		entities.extend(current.children)
+
+	def layout(self	):
+		elements = []
+		elements.extend(self.root.children)
+		current_parent = None
+		offset = 0.0
+
+		while not len(elements) == 0:
+			current = elements[0]
+			print current.input_entity.id
+			elements.remove(current)
+
+			if not current.parent == current_parent:
 				offset = 0.0
-				current_parent = current.input_entity.parent
+				current_parent = current.parent
 
 			scale = 0.0
 			if not current.input_entity.parent.size == 0:
@@ -57,12 +69,15 @@ class Treemap(avango.script.Script):
 			position = -0.5 + (scale/2) + offset
 			offset += scale
 
-			if current.input_entity.depth % 2 == 0:
-				current.geometry.Transform.value = avango.gua.make_trans_mat(position, 1.0, 0) * avango.gua.make_scale_mat(scale * 0.97, 0.97, 0.97)
-			else:
-				current.geometry.Transform.value = avango.gua.make_trans_mat(0, 1.0, position) * avango.gua.make_scale_mat(0.97, 0.97, scale * 0.97)
+			# Thrid Dimension layout
+			height_offset = current_parent.height
 
-			entities.extend(current.children)
+			if current.input_entity.depth % 2 == 0:
+				current.transform.Transform.value = avango.gua.make_trans_mat(position, 1.0  , 0) * avango.gua.make_scale_mat(scale * 0.97, 1.0, 0.97)
+			else:
+				current.transform.Transform.value = avango.gua.make_trans_mat(0, 1.0 , position) * avango.gua.make_scale_mat(0.97, 1.0, scale * 0.97)
+
+			elements.extend(current.children)
 
 	def focus(self, selector):
 		self.focus_element.highlight(False)
