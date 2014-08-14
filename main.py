@@ -59,6 +59,11 @@ def start():
 		EnableFPSDisplay = True
 	)
 
+	# ## Transform Test
+	# TMtest = avango.gua.nodes.TransformNode(Name = "Test")
+	# TMtest.Transform.value = avango.gua.make_scale_mat(0.1)
+	# graph.Root.value.Children.value.append(TMtest)
+
 	## Setup visualization-------------------
 	root = filesystemloader.load(sys.argv[1])
 	TM = Treemap()
@@ -149,9 +154,10 @@ def printhelper(node):
 def printelement(nodetupel):
 	for i in range(0, nodetupel[1]):
 		print(" "),
-	print nodetupel[0].Name.value + "   "
+	print nodetupel[0].Name.value
 	#print nodetupel[0]
-	#print nodetupel[0].Transform.value
+	# print nodetupel[0].Transform.value
+	print nodetupel[0].WorldTransform.value
 
 
 if __name__ == '__main__':
