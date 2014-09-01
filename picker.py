@@ -20,7 +20,7 @@ class Picker(avango.script.Script):
     self.PickedSceneGraph.value = avango.gua.nodes.SceneGraph()
     self.Ray.value  = avango.gua.nodes.RayNode()
     self.Options.value = avango.gua.PickingOptions.PICK_ONLY_FIRST_OBJECT \
-                       | avango.gua.PickingOptions.PICK_ONLY_FIRST_FACE
+                       | avango.gua.PickingOptions.PICK_ONLY_FIRST_FACE 
 
     self.Mask.value = ""
 

@@ -24,23 +24,23 @@ def start():
 		Name = "screen",
 		Width = 1.6,
 		Height = 0.9,
-		Transform = avango.gua.make_trans_mat(0.0, 0.0, 5)
+		Transform = avango.gua.make_trans_mat(0.0, 0.0, -2.5)
 	)
 
 	eye = avango.gua.nodes.TransformNode(
 		Name = "eye",
-		Transform = avango.gua.make_trans_mat(0.0, 0.0, 2.5)
+		Transform = avango.gua.make_trans_mat(0.0, 0.0, 7.5)
 	)
 
-	screen.Children.value = [eye]
+	eye.Children.value = [screen]
 
-	graph.Root.value.Children.value.append(screen)
+	graph.Root.value.Children.value.append(eye)
 
 	camera = avango.gua.nodes.Camera(
-		LeftEye = "/screen/eye",
-		RightEye = "/screen/eye",
-		LeftScreen = "/screen",
-		RightScreen = "/screen",
+		LeftEye = "/eye",
+		RightEye = "/eye",
+		LeftScreen = "/eye/screen",
+		RightScreen = "/eye/screen",
 		SceneGraph = "scenegraph"
 	)
 
@@ -48,6 +48,7 @@ def start():
 		Size = size,
 		LeftResolution = size
 	)
+
 
 	pipe = avango.gua.nodes.Pipeline(
 		Camera = camera,
@@ -58,6 +59,8 @@ def start():
 		EnableRayDisplay = True,
 		EnableFPSDisplay = True
 	)
+	# pipe.BackgroundTexture.value = "data/textures/skymap.jpg"
+	# pipe.BackgroundMode.value = avango.gua.BackgroundMode.SKYMAP_TEXTURE
 
 	## Setup visualization-------------------
 	root = filesystemloader.load(sys.argv[1])
@@ -78,7 +81,7 @@ def start():
 
 	## Setup Controllers
 	navigator = Navigator()
-	screen.Transform.connect_from(navigator.OutTransform)
+	eye.Transform.connect_from(navigator.OutTransform)
 
 	TM_Picker = Picker()
 	TM_Picker.myConstructor(TM)
@@ -89,7 +92,7 @@ def start():
 	eye.Children.value.append(pick_ray)
 	TM_Picker.Ray.value = pick_ray
 
-	navigator.controller2D.Picker = TM_Picker
+	navigator.setPicker(TM_Picker)
 
 	# # setup Reference
 	# loader = avango.gua.nodes.TriMeshLoader()
