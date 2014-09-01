@@ -1,13 +1,20 @@
 #!/usr/bin/python
 
-from tm_element import TM_Element
+import tm_element
 import avango
 import avango.gua
 import avango.script
 
+
+
 class Treemap(avango.script.Script):
 	Focuspath = avango.SFString()
 	Focuspath.value = ""
+
+	DEPTH = 1
+	LAST_ACCESSD = 2
+	LAST_MODIFIED = 3
+
 
 	def __init__(self):
 		self.super(Treemap).__init__()
@@ -15,14 +22,14 @@ class Treemap(avango.script.Script):
 		avango.gua.load_materials_from("data/materials/font")
 
 	def my_constructor(self, root):
-		self.root = TM_Element(root)
+		self.root = tm_element.TM_Element(root)
 		self.root_node = avango.gua.nodes.TransformNode(
 			Name = "TreeMapRoot",
 			Transform = avango.gua.make_scale_mat(1, 0.02, 1)
 		)
 		self.focus_element = self.root
 		self.init_dict()
-		self.min_max = self.init_third_dim()
+		self.init_third_dim(self.DEPTH)
 
 	def init_dict(self):
 		elements = []
@@ -36,20 +43,30 @@ class Treemap(avango.script.Script):
 			for child in current.children:
 				elements.append(child)
 
-	def init_third_dim(self):
+	def init_third_dim(self,third_dim_mode):
 		elements = []
 		elements.extend(self.root.children)
-		max_value = self.root.input_entity.access_time
-		min_value = self.root.input_entity.access_time
+		self.root.third_dimension_mode = third_dim_mode
+		max_value = self.root.get_third_dim_value()
+		min_value = self.root.get_third_dim_value()
 
+		# first run through to get the min max values
 		while not len(elements) == 0:
 			current = elements[0]
-			max_value = max(max_value, current.input_entity.access_time)
-			min_value = min(min_value, current.input_entity.access_time)
+			current.third_dimension_mode = third_dim_mode
+			max_value = max(max_value, current.get_third_dim_value())
+			min_value = min(min_value, current.get_third_dim_value())
 			elements.remove(current)
 			elements.extend(current.children)
 
-		return min_value, max_value
+		# second run through to set the height values
+		self.root.set_height(min_value, max_value)
+		elements.extend(self.root.children)
+		while not len(elements) == 0:
+			current = elements[0]
+			current.set_height(min_value, max_value)
+			elements.remove(current)
+			elements.extend(current.children)
 
 	def layout(self	):
 		elements = []
@@ -60,8 +77,6 @@ class Treemap(avango.script.Script):
 		while not len(elements) == 0:
 			current = elements[0]
 			elements.remove(current)
-
-			current.set_height(self.min_max)
 
 			if not current.parent == current_parent:
 				offset = 0.0

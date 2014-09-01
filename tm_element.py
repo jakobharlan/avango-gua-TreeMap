@@ -1,15 +1,18 @@
 #!/usr/bin/python
 
 from folder import folder
+import treemap
 import avango
 import avango.gua
 import mimetypes
+
 
 class TM_Element():
 
 	def __init__(self, input_entity, parent = None):
 		self.input_entity = input_entity
 		self.parent = parent
+		self.third_dimension_mode = None
 		self.children = []
 		if self.input_entity.__class__ == folder:
 			for child in self.input_entity.children:
@@ -28,6 +31,15 @@ class TM_Element():
 
 		self.height = 0.0
 
+	def get_third_dim_value(self):
+		if self.third_dimension_mode == treemap.Treemap.DEPTH:
+			return self.input_entity.depth
+		elif self.third_dimension_mode == treemap.Treemap.LAST_ACCESSD:
+			return self.input_entity.access_time
+		elif self.third_dimension_mode == treemap.Treemap.LAST_MODIFIED:
+			return self.input_entity.modified_time
+
+
 	def create_scenegraph_structure(self):
 		for child in self.children:
 			self.transform.Children.value.append( child.create_scenegraph_structure() )
@@ -40,13 +52,21 @@ class TM_Element():
 		else:
 			self.geometry.Material.value = self.material
 
-	def set_height(self, min_max):
+	def set_height(self, min_, max_):
 		if self.input_entity.__class__ == folder:
 			self.height = 1.0
+			print self.input_entity.id
 		else:
-			absolute = self.input_entity.access_time - min_max[0]
-			relative = float(absolute) / (min_max[1] - min_max[0])
-			self.height =  relative * 20
+			if self.third_dimension_mode == treemap.Treemap.DEPTH:
+				self.height = 1.0
+			elif self.third_dimension_mode == treemap.Treemap.LAST_ACCESSD:
+				absolute = self.input_entity.access_time - min_
+				relative = float(absolute) / (max_ - min_)
+				self.height =  relative * 5
+			elif self.third_dimension_mode == treemap.Treemap.LAST_MODIFIED:
+				absolute = self.input_entity.modified_time - min_
+				relative = float(absolute) / (max_ - min_)
+				self.height =  relative * 5
 
 
 	def select_material(self):
