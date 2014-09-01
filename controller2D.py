@@ -33,25 +33,28 @@ class Controller2D(avango.script.Script):
 		else:
 			distance = None
 
-		if self.Keyboard.KeyW.value:
+		if self.Keyboard.KeyW.value and self.Position.value.z > -0.5 and self.Position.value.x > -0.5 and self.Position.value.x < 0.5:
 			MovementZ = -1 * self.Speed.value
-		if self.Keyboard.KeyA.value:
+
+		if self.Keyboard.KeyA.value and self.Position.value.x > -0.5 and self.Position.value.z > -0.5 and self.Position.value.z < 0.5:
 			MovementX = -1 * self.Speed.value
-		if self.Keyboard.KeyS.value:
+
+		if self.Keyboard.KeyS.value and self.Position.value.z < 0.5 and self.Position.value.x > -0.5 and self.Position.value.x < 0.5:
 			MovementZ += 1 * self.Speed.value
-		if self.Keyboard.KeyD.value:
+
+		if self.Keyboard.KeyD.value and self.Position.value.x < 0.5 and self.Position.value.z > -0.5 and self.Position.value.z < 0.5:
 			MovementX += 1 * self.Speed.value
 
-		if not distance == None:
-			if distance < 1:
-				self.Position.value += avango.gua.Vec3(MovementX * distance, 0, MovementZ * distance)
-			else:
-				self.Position.value += avango.gua.Vec3(MovementX , 0, MovementZ)
+		if not distance == None:	#if the view is over the map
+			if distance < 1:					#if the  view is in a close range to the map
+				self.Position.value += avango.gua.Vec3(MovementX * distance, 0, MovementZ * distance)	#slow down the movement speed depending on the distance
+			else:											
+				self.Position.value += avango.gua.Vec3(MovementX , 0, MovementZ)	#set the position normally
 
 		if self.Keyboard.KeyQ.value:
-			if not distance == None:
-				if distance < 1:
-					self.zoom += ( 1 * distance * self.zoomspeed )
+			if not distance == None:									#allow to zoom out while picker finds something only
+				if distance < 1:												#if picker is more close to the map then 1
+					self.zoom += ( 1 * distance * self.zoomspeed )	#zoom out slower
 				else:
 					self.zoom += ( 1 * self.zoomspeed )
 
@@ -61,9 +64,9 @@ class Controller2D(avango.script.Script):
 			elif distance > 0.04:												#stop zoom if to close
 				self.zoom -= ( 1 * distance * self.zoomspeed )
 
-		positionx = self.Position.value.x
+		positionx = self.Position.value.x 						
 		positionz = self.Position.value.z
-		self.Position.value = avango.gua.Vec3(positionx, self.zoom, positionz)
+		self.Position.value = avango.gua.Vec3(positionx, self.zoom, positionz)		#set the zoom level only
 
 		if (	self.Position.value.x < 0.5 and
 					self.Position.value.x > -0.5 and
