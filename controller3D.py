@@ -54,11 +54,14 @@ class Controller3D(avango.script.Script):
 		self.Position.value += avango.gua.Vec3(MovementX, 0, MovementZ)
 		
 		position_y = self.height + self.size
-		if len(self.Down_Picker.Results.value) > 0:
-			# print self.Down_Picker.Results.value[0].Distance.value * 5
-			if(self.Down_Picker.Results.value[0].Distance.value * 5 > self.size):
-				self.height -= self.Down_Picker.Results.value[0].Distance.value * 5
-				position_y = self.height + self.size
+		if not self.Keyboard.KeySPACE.value:
+			if len(self.Down_Picker.Results.value) > 0:
+				# print self.Down_Picker.Results.value[0].Distance.value * 5
+				if self.Down_Picker.Results.value[0].Distance.value * 5 > self.size:
+					self.height -= self.Down_Picker.Results.value[0].Distance.value * 5
+					position_y = self.height + self.size
+		else:
+			print "space"
 
 		positionx = self.Position.value.x 						
 		positionz = self.Position.value.z
