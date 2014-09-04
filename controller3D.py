@@ -16,10 +16,11 @@ class Controller3D(avango.script.Script):
 	Down_Picker = None
 	height = 0
 	size = 0.02
+	position_y = 0
 	horizontal_speed = 0.3
 	vertical_speed = 0.3
 	walkspeed = avango.SFFloat()
-	viewing_direction = avango.gua.SFVec3()
+	viewing_direction = avango.gua.Vec3()
 
 	def __init__(self):
 		self.super(Controller3D).__init__()
@@ -36,46 +37,64 @@ class Controller3D(avango.script.Script):
 		MovementX = 0
 		MovementZ = 0
 
-		# print self.viewing_direction.value
-		# print self.viewing_direction.value
+
+		self.viewing_direction = self.get_ray_direction(self.Picker.Ray.value, avango.gua.Vec3(0.0005, 0.0005, 5))
+
 
 		if self.Keyboard.KeyW.value:
-			MovementX = 1 * self.walkspeed.value
+			MovementX += 1 * self.walkspeed.value * self.viewing_direction.x
+			MovementZ += 1 * self.walkspeed.value * self.viewing_direction.z
 
 		if self.Keyboard.KeyA.value:
-			MovementZ = 1 * self.walkspeed.value
+			MovementX += 1 * self.walkspeed.value * self.viewing_direction.z
+			MovementZ += -1 * self.walkspeed.value * self.viewing_direction.x
 
 		if self.Keyboard.KeyS.value:
-			MovementZ += -1 * self.walkspeed.value
+			MovementX += -1 * self.walkspeed.value * self.viewing_direction.x
+			MovementZ += -1 * self.walkspeed.value * self.viewing_direction.z
 
 		if self.Keyboard.KeyD.value:
-			MovementX += -1 * self.walkspeed.value
+			MovementX += -1 * self.walkspeed.value * self.viewing_direction.z
+			MovementZ += 1 * self.walkspeed.value * self.viewing_direction.x
 
 		self.Position.value += avango.gua.Vec3(MovementX, 0, MovementZ)
 		
-		position_y = self.height + self.size
+		self.position_y = self.height + self.size
 		if not self.Keyboard.KeySPACE.value:
 			if len(self.Down_Picker.Results.value) > 0:
-				# print self.Down_Picker.Results.value[0].Distance.value * 5
 				if self.Down_Picker.Results.value[0].Distance.value * 5 > self.size:
-					self.height -= self.Down_Picker.Results.value[0].Distance.value * 5
-					position_y = self.height + self.size
+					self.setPosition()
 		else:
-			print "space"
+			self.height += 0.001
 
-		positionx = self.Position.value.x 						
-		positionz = self.Position.value.z
+		position_x = self.Position.value.x 						
+		position_z = self.Position.value.z
 
 
-		self.Position.value = avango.gua.Vec3(positionx, position_y, positionz)
+		self.Position.value = avango.gua.Vec3(position_x, self.position_y, position_z)
 
 		self.OutTransform.value = avango.gua.make_trans_mat(self.Position.value) * \
 															rotation
 
 		self.Down_Picker.Ray.value.Transform.value = avango.gua.make_inverse_mat(self.OutTransform.value)
 		self.Down_Picker.Ray.value.Transform.value *= avango.gua.make_trans_mat(self.Position.value) * \
-																								 	avango.gua.make_rot_mat(-90, 1.0, 0.0, 0.0) * \
-														 										 	avango.gua.make_scale_mat(0.0005, 0.0005, 5)
+																									avango.gua.make_rot_mat(-90, 1.0, 0.0, 0.0) * \
+																									avango.gua.make_scale_mat(0.0005, 0.0005, 5)
+
+	def setPosition(self):
+		self.height -= (self.Down_Picker.Results.value[0].Distance.value * 5 - self.size)
+		self.position_y = self.height + self.size
+
+	def get_ray_direction(self, ray, ray_scale):
+		ray_start = ray.WorldTransform.value.get_translate()
+
+		matrix = ray.WorldTransform.value * avango.gua.make_scale_mat(1.0/ray_scale.x , 1.0/ray_scale.y , 1.0/ray_scale.z)
+		ray_direction = avango.gua.make_rot_mat(matrix.get_rotate()) * avango.gua.Vec3(0,0,-1)
+		ray_direction = avango.gua.Vec3(ray_direction.x, ray_direction.y, ray_direction.z)
+
+		# ray_direction.normalize()
+		print ray_direction
+		return ray_direction
 
 	def setKeyboard(self, Keyboard):
 		self.Keyboard = Keyboard

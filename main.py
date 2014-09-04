@@ -58,7 +58,8 @@ def start():
 		LeftResolution = size,
 		EnableRayDisplay = True,
 		EnableFPSDisplay = True,
-		NearClip = 0.005
+		EnableBackfaceCulling = False,
+		NearClip = 0.001
 	)
 	# pipe.BackgroundTexture.value = "data/textures/skymap.jpg"
 	# pipe.BackgroundMode.value = avango.gua.BackgroundMode.SKYMAP_TEXTURE
@@ -132,7 +133,7 @@ def start():
 		Name = "sun",
 		Color = avango.gua.Color(1, 1, 1),
 		Transform = avango.gua.make_rot_mat(-45, 1, 0, 0),
-		EnableShadows = False
+		EnableShadows = True
 	)
 
 	graph.Root.value.Children.value.append(sun)

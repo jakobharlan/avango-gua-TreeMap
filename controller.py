@@ -40,18 +40,16 @@ class Navigator(avango.script.Script):
 	@field_has_changed(Is_overview_modus)
 	def update_mode(self):
 		if self.Is_overview_modus.value:
-			# print "picker "+str(self.controller2D.Picker.Results.value[0].WorldPosition.value)
-			# print "Distance "+str(self.controller2D.Picker.Results.value[0].Distance.value)
-			self.controller2D.Position.value = self.controller3D.Position.value;
+			self.controller2D.Position.value = self.controller3D.Position.value
 			self.OutTransform.disconnect_from(self.controller3D.OutTransform)
 			self.OutTransform.connect_from(self.controller2D.OutTransform)
 		else:
-			# print "picker "+str(self.controller2D.Picker.Results.value[0].WorldPosition.value)
 			print "Distance "+str(self.controller2D.Picker.Results.value[0].Distance.value)
 			self.controller3D.height = self.controller2D.zoom - self.Picker.Results.value[0].Distance.value * 5
-			self.controller3D.rel_rot_x = 0;
-			self.controller3D.rel_rot_y = 0;
-			self.controller3D.Position.value = self.controller2D.Position.value;
+			# self.controller3D.setPosition()
+			self.controller3D.rel_rot_x = 0
+			self.controller3D.rel_rot_y = 0
+			self.controller3D.Position.value = self.controller2D.Position.value
 			self.OutTransform.disconnect_from(self.controller2D.OutTransform)
 			self.OutTransform.connect_from(self.controller3D.OutTransform)
 
