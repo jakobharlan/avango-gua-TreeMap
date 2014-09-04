@@ -91,7 +91,6 @@ class Controller3D(avango.script.Script):
 		ray_direction = avango.gua.Vec3(ray_direction.x, ray_direction.y, ray_direction.z)
 
 		# ray_direction.normalize()
-		print ray_direction
 		return ray_direction
 
 	def setKeyboard(self, Keyboard):

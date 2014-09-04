@@ -44,7 +44,6 @@ class Navigator(avango.script.Script):
 			self.OutTransform.disconnect_from(self.controller3D.OutTransform)
 			self.OutTransform.connect_from(self.controller2D.OutTransform)
 		else:
-			print "Distance "+str(self.controller2D.Picker.Results.value[0].Distance.value)
 			self.controller3D.height = self.controller2D.zoom - self.Picker.Results.value[0].Distance.value * 5
 			# self.controller3D.setPosition()
 			self.controller3D.rel_rot_x = 0
