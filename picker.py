@@ -24,7 +24,20 @@ class Picker(avango.script.Script):
 
     self.Mask.value = ""
 
-  def myConstructor(self, treemap):
+  def evaluate(self):
+    results = self.PickedSceneGraph.value.ray_test(self.Ray.value,
+                                             self.Options.value,
+                                             self.Mask.value)
+    self.Results.value = results.value
+
+
+class FocusUpdater(avango.script.Script):
+  Results = avango.gua.MFPickResult()
+  
+  def __init__(self):
+    self.super(FocusUpdater).__init__()
+
+  def setTreeMap(self, treemap):
     self.treemap = treemap
 
   @field_has_changed(Results)
@@ -32,9 +45,3 @@ class Picker(avango.script.Script):
     if len(self.Results.value) > 0:
       node = self.Results.value[0].Object.value
       self.treemap.focus(node)
-
-  def evaluate(self):
-    results = self.PickedSceneGraph.value.ray_test(self.Ray.value,
-                                             self.Options.value,
-                                             self.Mask.value)
-    self.Results.value = results.value

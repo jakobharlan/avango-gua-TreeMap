@@ -2,7 +2,7 @@
 import filesystemloader
 from treemap import Treemap
 from controller import Navigator, KeyController
-from picker import Picker
+from picker import Picker, FocusUpdater
 from Text import TextField
 
 import avango
@@ -94,7 +94,6 @@ def start():
 	eye.Transform.connect_from(navigator.OutTransform)
 
 	TM_Picker = Picker()
-	TM_Picker.myConstructor(TM)
 	TM_Picker.PickedSceneGraph.value = graph
 	pick_ray = avango.gua.nodes.RayNode(Name = "pick_ray")
 	pick_ray.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0) * \
@@ -104,8 +103,12 @@ def start():
 
 	navigator.setPicker(TM_Picker)
 
+	## Fucus Updater
+	focuser = FocusUpdater()
+	focuser.setTreeMap(TM)
+	focuser.Results.connect_from(TM_Picker.Results)
+
 	Down_Picker = Picker()
-	Down_Picker.myConstructor(TM)
 	Down_Picker.PickedSceneGraph.value = graph
 	pick_ray = avango.gua.nodes.RayNode(Name = "down_pick_ray")
 	pick_ray.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0) * \
