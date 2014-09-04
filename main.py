@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import filesystemloader
 from treemap import Treemap
-from controller import Navigator
+from controller import Navigator, KeyController
 from picker import Picker
 from Text import TextField
 
@@ -87,6 +87,9 @@ def start():
 	text.sf_text.connect_from(TM.Focuspath)
 
 	## Setup Controllers
+	keyController = KeyController()
+	keyController.setTreeMap(TM)
+
 	navigator = Navigator()
 	eye.Transform.connect_from(navigator.OutTransform)
 

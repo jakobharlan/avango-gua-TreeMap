@@ -58,4 +58,35 @@ class Navigator(avango.script.Script):
 	def evaluate(self):
 		if self.Keyboard.KeySTRG.value and not self.KeySTRG:
 			self.Is_overview_modus.value = not self.Is_overview_modus.value
-		self.KeySTRG = self.Keyboard.KeySTRG.value
+			self.KeySTRG = self.Keyboard.KeySTRG.value
+
+
+class KeyController(avango.script.Script):
+	Keyboard = device.KeyboardDevice()
+
+	def __init__(self):
+		self.super(KeyController).__init__()
+		self.always_evaluate(True)
+
+		self.KeyI = False
+		self.KeyO = False
+		self.KeyP = False
+
+	def setTreeMap(self, TreeMap):
+		self.TM = TreeMap
+
+	def evaluate(self):
+		if self.Keyboard.KeyI.value and not self.KeyI:
+			self.TM.init_third_dim(self.TM.DEPTH)
+			self.TM.layout()
+		self.KeyI = self.Keyboard.KeyI.value
+
+		if self.Keyboard.KeyO.value and not self.KeyO:
+			self.TM.init_third_dim(self.TM.LAST_ACCESSD)
+			self.TM.layout()
+		self.KeyO = self.Keyboard.KeyO.value
+
+		if self.Keyboard.KeyP.value and not self.KeyP:
+			self.TM.init_third_dim(self.TM.LAST_MODIFIED)
+			self.TM.layout()
+		self.KeyP = self.Keyboard.KeyP.value
