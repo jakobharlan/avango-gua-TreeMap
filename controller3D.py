@@ -13,33 +13,63 @@ class Controller3D(avango.script.Script):
 	rel_rot_x = 0
 	rel_rot_y = 0
 	Picker = None
-	
+	Down_Picker = None
+	height = 0
+	size = 0.02
+	horizontal_speed = 0.3
+	vertical_speed = 0.3
+	walkspeed = avango.SFFloat()
+	viewing_direction = avango.gua.SFVec3()
+
 	def __init__(self):
 		self.super(Controller3D).__init__()
 		self.always_evaluate(True)
+		self.walkspeed.value = 0.001
 
 	def evaluate(self):
-		# print self.Picker.Results.value[0].distance.value
+		self.rel_rot_x += self.Mouse.RelX.value
+		self.rel_rot_y += self.Mouse.RelY.value
 
-		rel_rot_x = self.Mouse.RelX.value
-		rel_rot_y = self.Mouse.RelY.value
+		if len(self.Down_Picker.Results.value) > 0:
+			print self.Down_Picker.Results.value[0].Distance.value
 
- 		self.rel_rot_x += rel_rot_x
-		self.rel_rot_y += rel_rot_y
+		rotation = avango.gua.make_rot_mat(-self.rel_rot_x * self.horizontal_speed, 0.0, 1.0, 0.0) * \
+							 avango.gua.make_rot_mat(-self.rel_rot_y * self.vertical_speed, 1.0, 0.0, 0.0)
 
-		rotation = avango.gua.make_rot_mat(-self.rel_rot_x * 0.5, 0.0, 1.0, 0.0)
-               # avango.gua.make_rot_mat(self.rel_rot_y * 1.0, 0.0, 0.0, 1.0)
+		MovementX = 0
+		MovementZ = 0
 
-		# print self.rel_rot_x.value
-		# print self.rel_rot_y.value
+		# print self.viewing_direction.value
+		# print self.viewing_direction.value
 
-		# print self.Position.value
+		if self.Keyboard.KeyW.value:
+			MovementX = 1 * self.walkspeed.value
+
+		if self.Keyboard.KeyA.value:
+			MovementZ = 1 * self.walkspeed.value
+
+		if self.Keyboard.KeyS.value:
+			MovementZ += -1 * self.walkspeed.value
+
+		if self.Keyboard.KeyD.value:
+			MovementX += -1 * self.walkspeed.value
+
+		self.Position.value += avango.gua.Vec3(MovementX, 0, MovementZ)
+
+		# print rotation(-1(-1
+
 		positionx = self.Position.value.x 						
 		positionz = self.Position.value.z
 
-		self.Position.value = avango.gua.Vec3(positionx, 2, positionz)		#set the zoom level only
+		self.Position.value = avango.gua.Vec3(positionx, self.height + self.size, positionz)
 
-		self.OutTransform.value = avango.gua.make_trans_mat(self.Position.value) * avango.gua.make_rot_mat(-90, 1, 0, 0) * rotation
+		self.OutTransform.value = avango.gua.make_trans_mat(self.Position.value) * \
+															rotation
+
+		self.Down_Picker.Ray.value.Transform.value = avango.gua.make_inverse_mat(self.OutTransform.value)
+		self.Down_Picker.Ray.value.Transform.value *= avango.gua.make_trans_mat(self.Position.value) * \
+																								 	avango.gua.make_rot_mat(-90, 1.0, 0.0, 0.0) * \
+														 										 	avango.gua.make_scale_mat(0.0005, 0.0005, 5)
 
 	def setKeyboard(self, Keyboard):
 		self.Keyboard = Keyboard
@@ -49,3 +79,6 @@ class Controller3D(avango.script.Script):
 
 	def setPicker(self, Picker):
 		self.Picker = Picker
+
+	def setDown_Picker(self, Picker):
+		self.Down_Picker = Picker

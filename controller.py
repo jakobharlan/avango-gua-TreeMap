@@ -47,7 +47,8 @@ class Navigator(avango.script.Script):
 			self.OutTransform.connect_from(self.controller2D.OutTransform)
 		else:
 			# print "picker "+str(self.controller2D.Picker.Results.value[0].WorldPosition.value)
-			# print "Distance "+str(self.controller2D.Picker.Results.value[0].Distance.value)
+			print "Distance "+str(self.controller2D.Picker.Results.value[0].Distance.value)
+			self.controller3D.height = self.controller2D.zoom - self.Picker.Results.value[0].Distance.value * 5
 			self.controller3D.rel_rot_x = 0;
 			self.controller3D.rel_rot_y = 0;
 			self.controller3D.Position.value = self.controller2D.Position.value;

@@ -57,7 +57,8 @@ def start():
 		SsaoIntensity = 0.5,
 		LeftResolution = size,
 		EnableRayDisplay = True,
-		EnableFPSDisplay = True
+		EnableFPSDisplay = True,
+		NearClip = 0.005
 	)
 	# pipe.BackgroundTexture.value = "data/textures/skymap.jpg"
 	# pipe.BackgroundMode.value = avango.gua.BackgroundMode.SKYMAP_TEXTURE
@@ -88,11 +89,23 @@ def start():
 	TM_Picker.PickedSceneGraph.value = graph
 	pick_ray = avango.gua.nodes.RayNode(Name = "pick_ray")
 	pick_ray.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0) * \
-														 avango.gua.make_scale_mat(0.01, 0.01, 5)
+														 avango.gua.make_scale_mat(0.0005, 0.0005, 5)
 	eye.Children.value.append(pick_ray)
 	TM_Picker.Ray.value = pick_ray
 
 	navigator.setPicker(TM_Picker)
+
+	Down_Picker = Picker()
+	Down_Picker.myConstructor(TM)
+	Down_Picker.PickedSceneGraph.value = graph
+	pick_ray = avango.gua.nodes.RayNode(Name = "down_pick_ray")
+	pick_ray.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0) * \
+														 avango.gua.make_rot_mat(-10, 1.0, 0.0, 0.0) * \
+														 avango.gua.make_scale_mat(0.0005, 0.0005, 5)
+	eye.Children.value.append(pick_ray)
+	Down_Picker.Ray.value = pick_ray
+
+	navigator.controller3D.setDown_Picker(Down_Picker)
 
 	# # setup Reference
 	# loader = avango.gua.nodes.TriMeshLoader()
