@@ -7,6 +7,8 @@ import sys
 def init_mouse():
 
 	mouse_name = os.popen("ls /dev/input/by-id | grep \"-event-mouse\" | sed -e \'s/\"//g\'  | cut -d\" \" -f4").read()
+	# mouse_name = os.popen("ls /dev/input/by-id | grep \"usb-Logitech_USB_Optical_Mouse-event-mouse\" | sed -e \'s/\"//g\'  | cut -d\" \" -f4").read()
+	
 
 	mouse_name = mouse_name.split()
 	if len(mouse_name) > 0:

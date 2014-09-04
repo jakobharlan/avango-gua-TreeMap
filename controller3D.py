@@ -2,89 +2,82 @@
 
 import avango.script
 from avango.script import field_has_changed
-import avango.gua
-import device
-import time
 
 class Controller3D(avango.script.Script):
+	OutTransform = avango.gua.SFMatrix4()
+	OutTransform.value = avango.gua.make_identity_mat()
+	Mouse = None
+	Keyboard = None
+	Position = avango.gua.SFVec3()
+	rel_rot_x = 0
+	rel_rot_y = 0
+	Picker = None
+	Down_Picker = None
+	height = 0
+	size = 0.02
+	horizontal_speed = 0.3
+	vertical_speed = 0.3
+	walkspeed = avango.SFFloat()
+	viewing_direction = avango.gua.SFVec3()
 
-  OutTransform = avango.gua.SFMatrix4()
+	def __init__(self):
+		self.super(Controller3D).__init__()
+		self.always_evaluate(True)
+		self.walkspeed.value = 0.001
 
-  Mouse = device.MouseDevice()
-  Keyboard = device.KeyboardDevice()
+	def evaluate(self):
+		self.rel_rot_x += self.Mouse.RelX.value
+		self.rel_rot_y += self.Mouse.RelY.value
 
-  RotationSpeed = avango.SFFloat()
-  MotionSpeed = avango.SFFloat()
+		if len(self.Down_Picker.Results.value) > 0:
+			print self.Down_Picker.Results.value[0].Distance.value
 
-  StartLocation = avango.gua.SFVec3()
-  StartRotation = avango.gua.SFVec2()
+		rotation = avango.gua.make_rot_mat(-self.rel_rot_x * self.horizontal_speed, 0.0, 1.0, 0.0) * \
+							 avango.gua.make_rot_mat(-self.rel_rot_y * self.vertical_speed, 1.0, 0.0, 0.0)
 
-  __rel_rot_x = avango.SFFloat()
-  __rel_rot_y = avango.SFFloat()
+		MovementX = 0
+		MovementZ = 0
 
-  def __init__(self):
-    self.super(Controller3D).__init__()
+		# print self.viewing_direction.value
+		# print self.viewing_direction.value
 
-    self.__rot_x = 0.0
-    self.__rot_y = 0.0
+		if self.Keyboard.KeyW.value:
+			MovementX = 1 * self.walkspeed.value
 
-    self.__location = avango.gua.Vec3(0.0, 0.0, 0.0)
+		if self.Keyboard.KeyA.value:
+			MovementZ = 1 * self.walkspeed.value
 
-    self.RotationSpeed.value = 0.1
-    self.MotionSpeed.value = 0.1
+		if self.Keyboard.KeyS.value:
+			MovementZ += -1 * self.walkspeed.value
 
-    self.__rel_rot_x.connect_from(self.Mouse.RelY)
-    self.__rel_rot_y.connect_from(self.Mouse.RelX)
+		if self.Keyboard.KeyD.value:
+			MovementX += -1 * self.walkspeed.value
 
-    self.__last_time = -1
+		self.Position.value += avango.gua.Vec3(MovementX, 0, MovementZ)
 
-    self.always_evaluate(True)
+		# print rotation(-1(-1
 
-  @field_has_changed(StartLocation)
-  def reset_location(self):
-    self.__location = self.StartLocation.value
+		positionx = self.Position.value.x 						
+		positionz = self.Position.value.z
 
-  @field_has_changed(StartRotation)
-  def reset_rotation(self):
-    self.__rot_x = self.StartRotation.value.x
-    self.__rot_y = self.StartRotation.value.y
+		self.Position.value = avango.gua.Vec3(positionx, self.height + self.size, positionz)
 
-  def evaluate(self):
-    if self.__last_time != -1:
-      current_time = time.time()
-      frame_time = current_time - self.__last_time
-      self.__last_time = current_time
+		self.OutTransform.value = avango.gua.make_trans_mat(self.Position.value) * \
+															rotation
 
-      self.__rot_x -= self.__rel_rot_x.value
-      self.__rot_y -= self.__rel_rot_y.value
-      rotation = avango.gua.make_rot_mat(self.__rot_y * self.RotationSpeed.value, 0.0, 1.0, 0.0 ) * \
-                 avango.gua.make_rot_mat(self.__rot_x * self.RotationSpeed.value, 1.0, 0.0, 0.0)
+		self.Down_Picker.Ray.value.Transform.value = avango.gua.make_inverse_mat(self.OutTransform.value)
+		self.Down_Picker.Ray.value.Transform.value *= avango.gua.make_trans_mat(self.Position.value) * \
+																								 	avango.gua.make_rot_mat(-90, 1.0, 0.0, 0.0) * \
+														 										 	avango.gua.make_scale_mat(0.0005, 0.0005, 5)
 
+	def setKeyboard(self, Keyboard):
+		self.Keyboard = Keyboard
 
-      if self.Keyboard.KeyW.value:
-        self.__location += (rotation * \
-                           avango.gua.make_trans_mat(0.0, 0.0, -self.MotionSpeed.value)).get_translate()
+	def setMouse(self, Mouse):
+		self.Mouse = Mouse
 
-      if self.Keyboard.KeyS.value:
-        self.__location += (rotation * \
-                           avango.gua.make_trans_mat(0.0, 0.0, self.MotionSpeed.value)).get_translate()
+	def setPicker(self, Picker):
+		self.Picker = Picker
 
-      if self.Keyboard.KeyA.value:
-        self.__location += (rotation * \
-                           avango.gua.make_trans_mat(-self.MotionSpeed.value, 0.0, 0.0)).get_translate()
-
-      if self.Keyboard.KeyD.value:
-        self.__location += (rotation * \
-                           avango.gua.make_trans_mat(self.MotionSpeed.value, 0.0, 0.0)).get_translate()
-
-      target = avango.gua.make_trans_mat(self.__location) * rotation
-
-      smoothness = frame_time * 10.0
-
-      self.OutTransform.value = self.OutTransform.value * (1.0 - smoothness) + target * smoothness
-
-    else:
-
-      self.__last_time = time.time()
-
-
+	def setDown_Picker(self, Picker):
+		self.Down_Picker = Picker

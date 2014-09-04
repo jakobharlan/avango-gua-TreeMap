@@ -1,7 +1,9 @@
 # important
 3D Navigation
 Sinnvolles 3tes Attribut
-
+Controller deaktivieren
+	improves performance
+	improves downray in 2d
 
 # nice to have
 

@@ -17,6 +17,8 @@ class Navigator(avango.script.Script):
 	OutTransform = avango.gua.SFMatrix4()
 	OutTransform.value = avango.gua.make_identity_mat()
 	Keyboard = device.KeyboardDevice()
+	Mouse = device.MouseDevice()
+	Picker = None
 
 
 	def __init__(self):
@@ -25,15 +27,32 @@ class Navigator(avango.script.Script):
 		self.OutTransform.connect_from(self.controller2D.OutTransform)
 		self.KeySTRG = False
 
+		self.controller2D.setKeyboard(self.Keyboard)
+		self.controller3D.setMouse(self.Mouse)
+		self.controller3D.setKeyboard(self.Keyboard)
+
+	def setPicker(self, Picker):
+		self.Picker = Picker
+		self.controller2D.setPicker(self.Picker)
+		self.controller3D.setPicker(self.Picker)
+
 
 	@field_has_changed(Is_overview_modus)
 	def update_mode(self):
 		if self.Is_overview_modus.value:
+			# print "picker "+str(self.controller2D.Picker.Results.value[0].WorldPosition.value)
+			# print "Distance "+str(self.controller2D.Picker.Results.value[0].Distance.value)
+			self.controller2D.Position.value = self.controller3D.Position.value;
 			self.OutTransform.disconnect_from(self.controller3D.OutTransform)
 			self.OutTransform.connect_from(self.controller2D.OutTransform)
 		else:
+			# print "picker "+str(self.controller2D.Picker.Results.value[0].WorldPosition.value)
+			print "Distance "+str(self.controller2D.Picker.Results.value[0].Distance.value)
+			self.controller3D.height = self.controller2D.zoom - self.Picker.Results.value[0].Distance.value * 5
+			self.controller3D.rel_rot_x = 0;
+			self.controller3D.rel_rot_y = 0;
+			self.controller3D.Position.value = self.controller2D.Position.value;
 			self.OutTransform.disconnect_from(self.controller2D.OutTransform)
-			self.controller3D.StartLocation.value = avango.gua.make_identity_mat().get_translate()
 			self.OutTransform.connect_from(self.controller3D.OutTransform)
 
 	def evaluate(self):

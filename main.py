@@ -24,23 +24,23 @@ def start():
 		Name = "screen",
 		Width = 1.6,
 		Height = 0.9,
-		Transform = avango.gua.make_trans_mat(0.0, 0.0, 5)
+		Transform = avango.gua.make_trans_mat(0.0, 0.0, -2.5)
 	)
 
 	eye = avango.gua.nodes.TransformNode(
 		Name = "eye",
-		Transform = avango.gua.make_trans_mat(0.0, 0.0, 2.5)
+		Transform = avango.gua.make_trans_mat(0.0, 0.0, 7.5)
 	)
 
-	screen.Children.value = [eye]
+	eye.Children.value = [screen]
 
-	graph.Root.value.Children.value.append(screen)
+	graph.Root.value.Children.value.append(eye)
 
 	camera = avango.gua.nodes.Camera(
-		LeftEye = "/screen/eye",
-		RightEye = "/screen/eye",
-		LeftScreen = "/screen",
-		RightScreen = "/screen",
+		LeftEye = "/eye",
+		RightEye = "/eye",
+		LeftScreen = "/eye/screen",
+		RightScreen = "/eye/screen",
 		SceneGraph = "scenegraph"
 	)
 
@@ -49,6 +49,7 @@ def start():
 		LeftResolution = size
 	)
 
+
 	pipe = avango.gua.nodes.Pipeline(
 		Camera = camera,
 		Window = window,
@@ -56,8 +57,11 @@ def start():
 		SsaoIntensity = 0.5,
 		LeftResolution = size,
 		EnableRayDisplay = True,
-		EnableFPSDisplay = True
+		EnableFPSDisplay = True,
+		NearClip = 0.005
 	)
+	# pipe.BackgroundTexture.value = "data/textures/skymap.jpg"
+	# pipe.BackgroundMode.value = avango.gua.BackgroundMode.SKYMAP_TEXTURE
 
 	# ## Transform Test
 	# TMtest = avango.gua.nodes.TransformNode(Name = "Test")
@@ -84,18 +88,30 @@ def start():
 
 	## Setup Controllers
 	navigator = Navigator()
-	screen.Transform.connect_from(navigator.OutTransform)
+	eye.Transform.connect_from(navigator.OutTransform)
 
 	TM_Picker = Picker()
 	TM_Picker.myConstructor(TM)
 	TM_Picker.PickedSceneGraph.value = graph
 	pick_ray = avango.gua.nodes.RayNode(Name = "pick_ray")
 	pick_ray.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0) * \
-														 avango.gua.make_scale_mat(0.01, 0.01, 5)
+														 avango.gua.make_scale_mat(0.0005, 0.0005, 5)
 	eye.Children.value.append(pick_ray)
 	TM_Picker.Ray.value = pick_ray
 
-	navigator.controller2D.Picker = TM_Picker
+	navigator.setPicker(TM_Picker)
+
+	Down_Picker = Picker()
+	Down_Picker.myConstructor(TM)
+	Down_Picker.PickedSceneGraph.value = graph
+	pick_ray = avango.gua.nodes.RayNode(Name = "down_pick_ray")
+	pick_ray.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0) * \
+														 avango.gua.make_rot_mat(-10, 1.0, 0.0, 0.0) * \
+														 avango.gua.make_scale_mat(0.0005, 0.0005, 5)
+	eye.Children.value.append(pick_ray)
+	Down_Picker.Ray.value = pick_ray
+
+	navigator.controller3D.setDown_Picker(Down_Picker)
 
 	# # setup Reference
 	# loader = avango.gua.nodes.TriMeshLoader()
