@@ -30,7 +30,8 @@ class Controller3D(avango.script.Script):
 		self.rel_rot_y += self.Mouse.RelY.value
 
 		if len(self.Down_Picker.Results.value) > 0:
-			print self.Down_Picker.Results.value[0].Distance.value
+			pass
+			# print self.Down_Picker.Results.value[0].Distance.value
 
 		rotation = avango.gua.make_rot_mat(-self.rel_rot_x * self.horizontal_speed, 0.0, 1.0, 0.0) * \
 							 avango.gua.make_rot_mat(-self.rel_rot_y * self.vertical_speed, 1.0, 0.0, 0.0)
@@ -54,8 +55,6 @@ class Controller3D(avango.script.Script):
 			MovementX += -1 * self.walkspeed.value
 
 		self.Position.value += avango.gua.Vec3(MovementX, 0, MovementZ)
-
-		# print rotation(-1(-1
 
 		positionx = self.Position.value.x 						
 		positionz = self.Position.value.z

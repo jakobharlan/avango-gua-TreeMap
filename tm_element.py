@@ -55,7 +55,6 @@ class TM_Element():
 	def set_height(self, min_, max_):
 		if self.input_entity.__class__ == folder:
 			self.height = 1.0
-			print self.input_entity.id
 		else:
 			if self.third_dimension_mode == treemap.Treemap.DEPTH:
 				self.height = 1.0
