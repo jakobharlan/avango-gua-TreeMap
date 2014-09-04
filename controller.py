@@ -55,8 +55,7 @@ class Navigator(avango.script.Script):
 	def evaluate(self):
 		if self.Keyboard.KeySTRG.value and not self.KeySTRG:
 			self.Is_overview_modus.value = not self.Is_overview_modus.value
-			self.KeySTRG = self.Keyboard.KeySTRG.value
-
+		self.KeySTRG = self.Keyboard.KeySTRG.value
 
 class KeyController(avango.script.Script):
 	Keyboard = device.KeyboardDevice()
