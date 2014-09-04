@@ -20,6 +20,8 @@ class Controller3D(avango.script.Script):
 	vertical_speed = 0.3
 	walkspeed = avango.SFFloat()
 	viewing_direction = avango.gua.Vec3()
+	is_falling = False
+	fall_speed = 0.0007
 
 	def __init__(self):
 		self.super(Controller3D).__init__()
@@ -59,10 +61,15 @@ class Controller3D(avango.script.Script):
 		self.Position.value += avango.gua.Vec3(MovementX, 0, MovementZ)
 		
 		self.position_y = self.height + self.size
+		
 		if not self.Keyboard.KeySPACE.value:
 			if len(self.Down_Picker.Results.value) > 0:
 				if self.Down_Picker.Results.value[0].Distance.value * 5 > self.size:
-					self.setPosition()
+					if self.is_falling == False:
+						self.is_falling = True
+					self.height -= self.fall_speed
+				else:
+					self.is_falling = False
 		else:
 			self.height += 0.001
 
@@ -80,8 +87,9 @@ class Controller3D(avango.script.Script):
 																									avango.gua.make_scale_mat(0.0005, 0.0005, 5)
 
 	def setPosition(self):
-		self.height -= (self.Down_Picker.Results.value[0].Distance.value * 5 - self.size)
-		self.position_y = self.height + self.size
+		# self.height -= (self.Down_Picker.Results.value[0].Distance.value * 5 - self.size)
+		# self.position_y = self.height + self.size
+		pass
 
 	def get_ray_direction(self, ray, ray_scale):
 		ray_start = ray.WorldTransform.value.get_translate()
