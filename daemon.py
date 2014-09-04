@@ -44,9 +44,21 @@ def init_keyboard():
 		keyboard.station = avango.daemon.Station('gua-device-keyboard' + str(i))
 		keyboard.device = "/dev/input/by-id/" + name
 
+		keyboard.buttons[1] = "EV_KEY::KEY_W"
+		keyboard.buttons[10] = "EV_KEY::KEY_A"
+		keyboard.buttons[11] = "EV_KEY::KEY_S"
+		keyboard.buttons[12] = "EV_KEY::KEY_D"
+
+		keyboard.buttons[26] = "EV_KEY::KEY_LEFTCTRL"
+		keyboard.buttons[17] = "EV_KEY::KEY_SPACE"
+		
+		keyboard.buttons[28] = "EV_KEY::KEY_1"
+		keyboard.buttons[29] = "EV_KEY::KEY_2"
+		keyboard.buttons[18] = "EV_KEY::KEY_3"
+
+
 
 		keyboard.buttons[0] = "EV_KEY::KEY_Q"
-		keyboard.buttons[1] = "EV_KEY::KEY_W"
 		keyboard.buttons[2] = "EV_KEY::KEY_E"
 		keyboard.buttons[3] = "EV_KEY::KEY_R"
 		keyboard.buttons[4] = "EV_KEY::KEY_T"
@@ -55,15 +67,12 @@ def init_keyboard():
 		keyboard.buttons[7] = "EV_KEY::KEY_I"
 		keyboard.buttons[8] = "EV_KEY::KEY_O"
 		keyboard.buttons[9] = "EV_KEY::KEY_P"
-		keyboard.buttons[10] = "EV_KEY::KEY_A"
-		keyboard.buttons[11] = "EV_KEY::KEY_S"
-		keyboard.buttons[12] = "EV_KEY::KEY_D"
 		keyboard.buttons[13] = "EV_KEY::KEY_F"
 		keyboard.buttons[14] = "EV_KEY::KEY_G"
 		keyboard.buttons[15] = "EV_KEY::KEY_H"
 		keyboard.buttons[16] = "EV_KEY::KEY_J"
 		# keyboard.buttons[17] = "EV_KEY::KEY_K"
-		keyboard.buttons[18] = "EV_KEY::KEY_L"
+		# keyboard.buttons[18] = "EV_KEY::KEY_L"
 		keyboard.buttons[19] = "EV_KEY::KEY_Y"
 		keyboard.buttons[20] = "EV_KEY::KEY_X"
 		keyboard.buttons[21] = "EV_KEY::KEY_C"
@@ -72,12 +81,8 @@ def init_keyboard():
 		keyboard.buttons[24] = "EV_KEY::KEY_N"
 		keyboard.buttons[25] = "EV_KEY::KEY_M"
 
-		keyboard.buttons[26] = "EV_KEY::KEY_LEFTCTRL"
-		keyboard.buttons[17] = "EV_KEY::KEY_SPACE"
 		keyboard.buttons[27] = "EV_KEY::KEY_PAGEDOWN"
 
-		keyboard.buttons[28] = "EV_KEY::KEY_1"
-		keyboard.buttons[29] = "EV_KEY::KEY_2"
 		keyboard.buttons[30] = "EV_KEY::KEY_LEFT"
 		keyboard.buttons[31] = "EV_KEY::KEY_RIGHT"
 
