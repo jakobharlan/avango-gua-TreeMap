@@ -2,7 +2,6 @@
 
 import avango.script
 from avango.script import field_has_changed
-import device
 
 class Controller3D(avango.script.Script):
 	OutTransform = avango.gua.SFMatrix4()
@@ -69,7 +68,6 @@ class Controller3D(avango.script.Script):
 
 		position_x = self.Position.value.x 						
 		position_z = self.Position.value.z
-
 
 		self.Position.value = avango.gua.Vec3(position_x, self.position_y, position_z)
 

@@ -1,8 +1,8 @@
 #!/usr/bin/python
 import filesystemloader
 from treemap import Treemap
-from controller import Navigator
-from picker import Picker
+from controller import Navigator, KeyController
+from picker import Picker, FocusUpdater
 from Text import TextField
 
 import avango
@@ -64,12 +64,18 @@ def start():
 	# pipe.BackgroundTexture.value = "data/textures/skymap.jpg"
 	# pipe.BackgroundMode.value = avango.gua.BackgroundMode.SKYMAP_TEXTURE
 
+	# ## Transform Test
+	# TMtest = avango.gua.nodes.TransformNode(Name = "Test")
+	# TMtest.Transform.value = avango.gua.make_scale_mat(0.1)
+	# graph.Root.value.Children.value.append(TMtest)
+
 	## Setup visualization-------------------
 	root = filesystemloader.load(sys.argv[1])
 	TM = Treemap()
 	TM.my_constructor(root)
 	TM.create_scenegraph_structure()
 	graph.Root.value.Children.value.append(TM.root_node)
+	graph.update_cache()
 	TM.layout()
 
 	## Setup Text
@@ -82,11 +88,13 @@ def start():
 	text.sf_text.connect_from(TM.Focuspath)
 
 	## Setup Controllers
+	keyController = KeyController()
+	keyController.setTreeMap(TM)
+
 	navigator = Navigator()
 	eye.Transform.connect_from(navigator.OutTransform)
 
 	TM_Picker = Picker()
-	TM_Picker.myConstructor(TM)
 	TM_Picker.PickedSceneGraph.value = graph
 	pick_ray = avango.gua.nodes.RayNode(Name = "pick_ray")
 	pick_ray.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0) * \
@@ -96,8 +104,12 @@ def start():
 
 	navigator.setPicker(TM_Picker)
 
+	## Fucus Updater
+	focuser = FocusUpdater()
+	focuser.setTreeMap(TM)
+	focuser.Results.connect_from(TM_Picker.Results)
+
 	Down_Picker = Picker()
-	Down_Picker.myConstructor(TM)
 	Down_Picker.PickedSceneGraph.value = graph
 	pick_ray = avango.gua.nodes.RayNode(Name = "down_pick_ray")
 	pick_ray.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0) * \
@@ -166,9 +178,10 @@ def printhelper(node):
 def printelement(nodetupel):
 	for i in range(0, nodetupel[1]):
 		print(" "),
-	print nodetupel[0].Name.value + "   "
+	print nodetupel[0].Name.value
 	#print nodetupel[0]
-	#print nodetupel[0].Transform.value
+	# print nodetupel[0].Transform.value
+	print nodetupel[0].WorldTransform.value
 
 
 if __name__ == '__main__':
