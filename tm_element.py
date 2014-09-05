@@ -88,5 +88,4 @@ class TM_Element():
 		else:
 			mat = mat + ".gmd"
 
-		print mat
 		return mat
