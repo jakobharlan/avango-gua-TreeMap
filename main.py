@@ -120,6 +120,17 @@ def start():
 
 	navigator.controller3D.setDown_Picker(Down_Picker)
 
+	Move_Picker = Picker()
+	Move_Picker.PickedSceneGraph.value = graph
+	pick_ray = avango.gua.nodes.RayNode(Name = "move_pick_ray")
+	pick_ray.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0) * \
+														 avango.gua.make_rot_mat(0, 0.0, 1.0, 0.0) * \
+														 avango.gua.make_scale_mat(0.0005, 0.0005, 5)
+	eye.Children.value.append(pick_ray)
+	Move_Picker.Ray.value = pick_ray
+
+	navigator.controller3D.setMove_Picker(Move_Picker)
+
 	# # setup Reference
 	# loader = avango.gua.nodes.TriMeshLoader()
 	# reference_cubes = []

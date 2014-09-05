@@ -64,25 +64,25 @@ class KeyController(avango.script.Script):
 		self.super(KeyController).__init__()
 		self.always_evaluate(True)
 
-		self.KeyI = False
-		self.KeyO = False
-		self.KeyP = False
+		self.Key1 = False
+		self.Key2 = False
+		self.Key3 = False
 
 	def setTreeMap(self, TreeMap):
 		self.TM = TreeMap
 
 	def evaluate(self):
-		if self.Keyboard.KeyI.value and not self.KeyI:
+		if self.Keyboard.Key1.value and not self.Key1:
 			self.TM.init_third_dim(self.TM.DEPTH)
 			self.TM.layout()
-		self.KeyI = self.Keyboard.KeyI.value
+		self.Key1 = self.Keyboard.Key1.value
 
-		if self.Keyboard.KeyO.value and not self.KeyO:
+		if self.Keyboard.Key2.value and not self.Key2:
 			self.TM.init_third_dim(self.TM.LAST_ACCESSD)
 			self.TM.layout()
-		self.KeyO = self.Keyboard.KeyO.value
+		self.Key2 = self.Keyboard.Key2.value
 
-		if self.Keyboard.KeyP.value and not self.KeyP:
+		if self.Keyboard.Key3.value and not self.Key3:
 			self.TM.init_third_dim(self.TM.LAST_MODIFIED)
 			self.TM.layout()
-		self.KeyP = self.Keyboard.KeyP.value
+		self.Key3 = self.Keyboard.Key3.value
