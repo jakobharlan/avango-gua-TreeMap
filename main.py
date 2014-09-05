@@ -98,7 +98,7 @@ def start():
 	TM_Picker.PickedSceneGraph.value = graph
 	pick_ray = avango.gua.nodes.RayNode(Name = "pick_ray")
 	pick_ray.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0) * \
-														 avango.gua.make_scale_mat(0.0005, 0.0005, 5)
+														 avango.gua.make_scale_mat(0.0001, 0.0001, 5)
 	eye.Children.value.append(pick_ray)
 	TM_Picker.Ray.value = pick_ray
 
@@ -115,7 +115,7 @@ def start():
 	pick_ray.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0) * \
 														 avango.gua.make_rot_mat(-10, 1.0, 0.0, 0.0) * \
 														 avango.gua.make_scale_mat(0.0005, 0.0005, 5)
-	eye.Children.value.append(pick_ray)
+	graph.Root.value.Children.value.append(pick_ray)
 	Down_Picker.Ray.value = pick_ray
 
 	navigator.controller3D.setDown_Picker(Down_Picker)
@@ -126,7 +126,7 @@ def start():
 	pick_ray.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0) * \
 														 avango.gua.make_rot_mat(0, 0.0, 1.0, 0.0) * \
 														 avango.gua.make_scale_mat(0.0005, 0.0005, 5)
-	eye.Children.value.append(pick_ray)
+	graph.Root.value.Children.value.append(pick_ray)
 	Move_Picker.Ray.value = pick_ray
 
 	navigator.controller3D.setMove_Picker(Move_Picker)

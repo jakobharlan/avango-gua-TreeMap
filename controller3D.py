@@ -32,10 +32,14 @@ class Controller3D(avango.script.Script):
 		self.walkspeed.value = 0.001
 
 	def evaluate(self):
-		self.Down_Picker.Ray.value.Transform.value = avango.gua.make_inverse_mat(self.OutTransform.value)
-		self.Down_Picker.Ray.value.Transform.value *= avango.gua.make_trans_mat(self.Position.value) * \
+		# self.Down_Picker.Ray.value.Transform.value = avango.gua.make_inverse_mat(self.OutTransform.value)
+		self.Down_Picker.Ray.value.Transform.value = avango.gua.make_trans_mat(self.Position.value.x, 5, self.Position.value.z) * \
 																									avango.gua.make_rot_mat(-90, 1.0, 0.0, 0.0) * \
-																									avango.gua.make_scale_mat(0.0005, 0.0005, 5)
+																									avango.gua.make_scale_mat(0.0005, 0.0005, 10)
+
+		# if len(self.Down_Picker.Results.value) > 0:
+		# 	print self.Down_Picker.Results.value[0].Distance.value
+		
 
 		self.rel_rot_x += self.Mouse.RelX.value
 		self.rel_rot_y += self.Mouse.RelY.value
@@ -47,7 +51,7 @@ class Controller3D(avango.script.Script):
 		MovementZ = 0
 
 
-		self.viewing_direction = self.get_ray_direction(self.Picker.Ray.value, avango.gua.Vec3(0.0005, 0.0005, 5))
+		self.viewing_direction = self.get_ray_direction(self.Picker.Ray.value, avango.gua.Vec3(0.0001, 0.0001, 5))
 
 
 		if self.Keyboard.KeyW.value:
@@ -55,16 +59,16 @@ class Controller3D(avango.script.Script):
 			MovementZ += 1 * self.walkspeed.value * self.viewing_direction.z
 
 		if self.Keyboard.KeyA.value:
-			MovementX += 1 * self.walkspeed.value * self.viewing_direction.z
-			MovementZ += -1 * self.walkspeed.value * self.viewing_direction.x
+			MovementX += 0.3 * self.walkspeed.value * self.viewing_direction.z
+			MovementZ += -0.3 * self.walkspeed.value * self.viewing_direction.x
 
 		if self.Keyboard.KeyS.value:
 			MovementX += -1 * self.walkspeed.value * self.viewing_direction.x
 			MovementZ += -1 * self.walkspeed.value * self.viewing_direction.z
 
 		if self.Keyboard.KeyD.value:
-			MovementX += -1 * self.walkspeed.value * self.viewing_direction.z
-			MovementZ += 1 * self.walkspeed.value * self.viewing_direction.x
+			MovementX += -0.3 * self.walkspeed.value * self.viewing_direction.z
+			MovementZ += 0.3 * self.walkspeed.value * self.viewing_direction.x
 
 		if not MovementX == 0 or not MovementZ == 0:
 			moving_direction = avango.gua.Vec2(MovementX, MovementZ)
@@ -77,10 +81,10 @@ class Controller3D(avango.script.Script):
 			if moving_direction.x > 0:
 				angle = 360 - angle
 
-			self.Move_Picker.Ray.value.Transform.value = avango.gua.make_inverse_mat(self.OutTransform.value)
-			self.Move_Picker.Ray.value.Transform.value *= avango.gua.make_trans_mat(self.Position.value.x, self.Position.value.y, self.Position.value.z) * \
+			# self.Move_Picker.Ray.value.Transform.value = avango.gua.make_inverse_mat(self.OutTransform.value)
+			self.Move_Picker.Ray.value.Transform.value = avango.gua.make_trans_mat(self.Position.value.x, self.Position.value.y , self.Position.value.z) * \
 																										avango.gua.make_rot_mat(int(angle), 0.0, 1.0, 0.0) * \
-																										avango.gua.make_scale_mat(0.0005, 0.0005, 5)		
+																										avango.gua.make_scale_mat(0.0001, 0.0001, 5)		
 
 
 		if len(self.Move_Picker.Results.value) > 0:
@@ -96,14 +100,15 @@ class Controller3D(avango.script.Script):
 		
 		if not self.Keyboard.KeySPACE.value:
 			if len(self.Down_Picker.Results.value) > 0:
-				if self.Down_Picker.Results.value[0].Distance.value * 5 > self.size:
-					if self.is_falling == False:
-						self.is_falling = True
-					self.height -= self.fall_speed
-				else:
-					self.is_falling = False
-		else:
-			self.height += 0.001
+				self.setPosition()
+				# if (self.Down_Picker.Results.value[0].Distance.value -1) * 10 > self.size:
+				# 	if self.is_falling == False:
+				# 		self.is_falling = True
+				# 	self.height -= self.fall_speed
+				# else:
+				# 	self.is_falling = False
+		# else:
+		# 	self.height += 0.001
 
 		position_x = self.Position.value.x 						
 		position_z = self.Position.value.z
@@ -117,8 +122,13 @@ class Controller3D(avango.script.Script):
 
 
 	def setPosition(self):
-		# self.height -= (self.Down_Picker.Results.value[0].Distance.value * 5 - self.size)
-		# self.position_y = self.height + self.size
+
+		# self.height = ((self.Down_Picker.Results.value[0].Distance.value*10))
+		# print ("measure "+str(self.Down_Picker.Results.value[0].Distance.value*10))
+		# print ("height "+str(3 - self.Down_Picker.Results.value[0].Distance.value*10))
+		self.height = 5 - self.Down_Picker.Results.value[0].Distance.value*10
+		# self.height = 0.1
+		self.position_y = self.height + self.size
 		pass
 
 	def get_ray_direction(self, ray, ray_scale):
