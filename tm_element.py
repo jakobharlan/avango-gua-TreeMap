@@ -56,7 +56,7 @@ class TM_Element():
 			self.height = 1.0
 		else:
 			if self.third_dimension_mode == treemap.Treemap.DEPTH:
-				self.height = 1.0
+				self.height = 1.5
 			elif self.third_dimension_mode == treemap.Treemap.LAST_ACCESSD:
 				absolute = self.input_entity.access_time - min_
 				relative = float(absolute) / (max_ - min_)
