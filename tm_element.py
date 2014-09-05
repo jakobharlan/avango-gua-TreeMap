@@ -18,6 +18,7 @@ class TM_Element():
 			for child in self.input_entity.children:
 				self.children.append(TM_Element(child,self))
 
+		self.highlighted = False
 		self.material = self.select_material()
 
 		loader = avango.gua.nodes.TriMeshLoader()
@@ -28,8 +29,8 @@ class TM_Element():
 			self.material,
 			avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.MAKE_PICKABLE,
 		)
-
 		self.height = 0.0
+
 
 	def get_third_dim_value(self):
 		if self.third_dimension_mode == treemap.Treemap.DEPTH:
@@ -47,10 +48,8 @@ class TM_Element():
 		return self.transform
 
 	def highlight(self, highlight):
-		if highlight:
-			self.geometry.Material.value = "data/materials/White.gmd"
-		else:
-			self.geometry.Material.value = self.material
+		self.highlighted = highlight
+		self.geometry.Material.value = self.select_material()
 
 	def set_height(self, min_, max_):
 		if self.input_entity.__class__ == folder:
@@ -70,16 +69,24 @@ class TM_Element():
 
 	def select_material(self):
 		mimetype = mimetypes.guess_type(self.input_entity.path)[0]
+		mat = ""
 		if self.input_entity.__class__ == folder:
-			return "data/materials/Orange.gmd"
+			mat = "data/materials/Orange"
 
 		elif not mimetype == None:
-
 			if mimetype.startswith("text"):
-				return "data/materials/Blue.gmd"
+				mat = "data/materials/Blue"
 			elif mimetype.startswith("image"):
-				return "data/materials/Red.gmd"
+				mat = "data/materials/Red"
 			elif mimetype.startswith("application"):
-				return "data/materials/Yellow.gmd"
+				mat = "data/materials/Yellow"
+		else:
+			mat = "data/materials/Grey"
 
-		return "data/materials/Grey.gmd"
+		if self.highlighted:
+			mat = mat + "_bright.gmd"
+		else:
+			mat = mat + ".gmd"
+
+		print mat
+		return mat
