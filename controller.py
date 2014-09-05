@@ -68,6 +68,9 @@ class KeyController(avango.script.Script):
 		self.Key2 = False
 		self.Key3 = False
 
+		self.KeyF = False
+		self.OnlyFolders = False
+
 	def setTreeMap(self, TreeMap):
 		self.TM = TreeMap
 
@@ -89,3 +92,9 @@ class KeyController(avango.script.Script):
 			self.TM.layout()
 			# self.controller3D.set_Position()
 		self.Key3 = self.Keyboard.Key3.value
+
+		if self.Keyboard.KeyF.value and not self.KeyF:
+			self.OnlyFolders = not self.OnlyFolders
+			self.TM.clear_scenegraph_structure()
+			self.TM.create_scenegraph_structure(OnlyFolders = self.OnlyFolders)
+		self.KeyF = self.Keyboard.KeyF.value

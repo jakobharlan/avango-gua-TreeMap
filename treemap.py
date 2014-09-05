@@ -110,5 +110,9 @@ class Treemap(avango.script.Script):
 
 
 
-	def create_scenegraph_structure(self):
-		self.root_node.Children.value.append(self.root.create_scenegraph_structure())
+	def create_scenegraph_structure(self, OnlyFolders = False):
+		self.root_node.Children.value.append(self.root.create_scenegraph_structure(OnlyFolders))
+
+	def clear_scenegraph_structure(self):
+		self.root_node.Children.value = []
+		self.root.clear_scenegraph_structure()

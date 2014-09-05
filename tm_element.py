@@ -41,11 +41,17 @@ class TM_Element():
 			return self.input_entity.modified_time
 
 
-	def create_scenegraph_structure(self):
+	def create_scenegraph_structure(self, OnlyFolders):
 		for child in self.children:
-			self.transform.Children.value.append( child.create_scenegraph_structure() )
+			if not ((not child.input_entity.__class__ == folder) and OnlyFolders): 
+				self.transform.Children.value.append( child.create_scenegraph_structure(OnlyFolders) )
 		self.transform.Children.value.append(self.geometry)
 		return self.transform
+
+	def clear_scenegraph_structure(self):
+		for child in self.children:
+			self.transform.Children.value = []
+			child.clear_scenegraph_structure()
 
 	def highlight(self, highlight):
 		self.highlighted = highlight

@@ -73,7 +73,7 @@ def start():
 	root = filesystemloader.load(sys.argv[1])
 	TM = Treemap()
 	TM.my_constructor(root)
-	TM.create_scenegraph_structure()
+	TM.create_scenegraph_structure(OnlyFolders = False)
 	graph.Root.value.Children.value.append(TM.root_node)
 	graph.update_cache()
 	TM.layout()
@@ -192,7 +192,7 @@ def printelement(nodetupel):
 	print nodetupel[0].Name.value
 	#print nodetupel[0]
 	# print nodetupel[0].Transform.value
-	print nodetupel[0].WorldTransform.value
+	# print nodetupel[0].WorldTransform.value
 
 
 if __name__ == '__main__':
