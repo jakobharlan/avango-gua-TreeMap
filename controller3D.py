@@ -97,7 +97,8 @@ class Controller3D(avango.script.Script):
 
 
 
-	def setPosition(self):tr(3 - self.Down_Picker.Results.value[0].Distance.value*10))
+	def setPosition(self):
+		print str(3 - self.Down_Picker.Results.value[0].Distance.value*10)
 		self.height = 5 - self.Down_Picker.Results.value[0].Distance.value*10
 		self.position_y = self.height + self.size
 		pass

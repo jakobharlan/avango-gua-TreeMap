@@ -56,15 +56,15 @@ class TM_Element():
 			self.height = 1.0
 		else:
 			if self.third_dimension_mode == treemap.Treemap.DEPTH:
-				self.height = 1.5
+				self.height = 0.5
 			elif self.third_dimension_mode == treemap.Treemap.LAST_ACCESSD:
 				absolute = self.input_entity.access_time - min_
 				relative = float(absolute) / (max_ - min_)
-				self.height =  relative * 5
+				self.height =  relative * 5 + 0.01
 			elif self.third_dimension_mode == treemap.Treemap.LAST_MODIFIED:
 				absolute = self.input_entity.modified_time - min_
 				relative = float(absolute) / (max_ - min_)
-				self.height =  relative * 5
+				self.height =  relative * 5 + 0.01
 
 
 	def select_material(self):
