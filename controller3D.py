@@ -25,9 +25,8 @@ class Controller3D(avango.script.Script):
 	is_falling = False
 	fall_speed = 0.0007
 	ascend_speed = 0.0007
+	run_speed = 4
 	collision_value = 0.0005
-	MovementX = 0
-	MovementZ = 0
 
 	def __init__(self):
 		self.super(Controller3D).__init__()
@@ -35,8 +34,8 @@ class Controller3D(avango.script.Script):
 		self.walkspeed.value = 0.001
 
 	def evaluate(self):
-		self.MovementX = 0
-		self.MovementZ = 0
+		MovementX = 0
+		MovementZ = 0
 
 		self.config_Down_Picker()	#sets the down picker
 
@@ -50,30 +49,35 @@ class Controller3D(avango.script.Script):
 
 
 		if self.Keyboard.KeyW.value:
-			self.MovementX += 1 * self.walkspeed.value * self.viewing_direction.x
-			self.MovementZ += 1 * self.walkspeed.value * self.viewing_direction.z
+			MovementX += 1 * self.walkspeed.value * self.viewing_direction.x
+			MovementZ += 1 * self.walkspeed.value * self.viewing_direction.z
 
 		if self.Keyboard.KeyA.value:
-			self.MovementX += 0.3 * self.walkspeed.value * self.viewing_direction.z
-			self.MovementZ += -0.3 * self.walkspeed.value * self.viewing_direction.x
+			MovementX += 0.3 * self.walkspeed.value * self.viewing_direction.z
+			MovementZ += -0.3 * self.walkspeed.value * self.viewing_direction.x
 
 		if self.Keyboard.KeyS.value:
-			self.MovementX += -1 * self.walkspeed.value * self.viewing_direction.x
-			self.MovementZ += -1 * self.walkspeed.value * self.viewing_direction.z
+			MovementX += -1 * self.walkspeed.value * self.viewing_direction.x
+			MovementZ += -1 * self.walkspeed.value * self.viewing_direction.z
 
 		if self.Keyboard.KeyD.value:
-			self.MovementX += -0.3 * self.walkspeed.value * self.viewing_direction.z
-			self.MovementZ += 0.3 * self.walkspeed.value * self.viewing_direction.x
+			MovementX += -0.3 * self.walkspeed.value * self.viewing_direction.z
+			MovementZ += 0.3 * self.walkspeed.value * self.viewing_direction.x
+
+		if self.Keyboard.KeySHIFT.value and not self.is_falling:
+			MovementX *= self.run_speed
+			MovementZ *= self.run_speed
 
 		if self.is_falling:
-			self.MovementX *= 0.4
-			self.MovementZ *= 0.4
+			MovementX *= 0.4
+			MovementZ *= 0.4
 
-		self.config_Move_Picker()
+		self.config_Move_Picker(MovementX, MovementZ)
 		if len(self.Move_Picker.Results.value) > 0:
-			if self.Move_Picker.Results.value[0].Distance.value < self.collision_value:
-				self.MovementX = 0
-				self.MovementZ = 0
+			movement_speed = math.sqrt(math.pow(MovementX, 2) + math.pow(MovementZ, 2))
+			if self.Move_Picker.Results.value[0].Distance.value < movement_speed:
+				MovementX = 0
+				MovementZ = 0
 
 		if not self.Keyboard.KeySPACE.value:
 			if len(self.Down_Picker.Results.value) > 0:
@@ -82,7 +86,9 @@ class Controller3D(avango.script.Script):
 			self.height += self.ascend_speed
 			self.position_y = self.height + self.size
 
-		self.Position.value += avango.gua.Vec3(self.MovementX, 0, self.MovementZ)
+
+
+		self.Position.value += avango.gua.Vec3(MovementX, 0, MovementZ)
 
 		position_x = self.Position.value.x 						
 		position_z = self.Position.value.z
@@ -100,7 +106,7 @@ class Controller3D(avango.script.Script):
 			self.is_falling = True
 			self.height -= self.fall_speed
 		elif 5 - self.Down_Picker.Results.value[0].Distance.value*10 - self.height > 0.001:
-			pass
+			self.height = 5 - self.Down_Picker.Results.value[0].Distance.value*10
 		else:
 			self.is_falling = False
 			self.height = 5 - self.Down_Picker.Results.value[0].Distance.value*10
@@ -135,9 +141,9 @@ class Controller3D(avango.script.Script):
 																									avango.gua.make_rot_mat(-90, 1.0, 0.0, 0.0) * \
 																									avango.gua.make_scale_mat(0.0005, 0.0005, 10)
 
-	def config_Move_Picker(self):
-		if not self.MovementX == 0 or not self.MovementZ == 0:
-			moving_direction = avango.gua.Vec2(self.MovementX, self.MovementZ)
+	def config_Move_Picker(self, MovementX, MovementZ):
+		if not MovementX == 0 or not MovementZ == 0:
+			moving_direction = avango.gua.Vec2(MovementX, MovementZ)
 			standard_direction = avango.gua.Vec2(0, -1)	
 
 			a = ( moving_direction.x * standard_direction.x )
