@@ -5,7 +5,6 @@ Controller deaktivieren
 	improves downray in 2d
 
 Core:
-	Focus level wechseln
 	Möglichkeit Dateien nur für Focus und Kinder vom Focus anzuzeigen 
 	nur pfad zum treemap root
 
