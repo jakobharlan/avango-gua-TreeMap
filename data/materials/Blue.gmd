@@ -4,7 +4,7 @@
 	"uniforms" :
 	{
 		"diffuse_color" : "(0.000  0.000  0.800)",
-		"emit" : "0.2",
-		"shinyness" : "3"
+		"emit" : "0.1",
+		"shinyness" : "10000"
 	}
 }

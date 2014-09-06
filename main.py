@@ -152,14 +152,23 @@ def start():
 	# graph.Root.value.Children.value.append(reference_cubes[3])
 
 	# Light for the Treemap
-	sun = avango.gua.nodes.SunLightNode(
-		Name = "sun",
-		Color = avango.gua.Color(1, 1, 1),
-		Transform = avango.gua.make_rot_mat(-45, 1, 0, 0),
+	# sun = avango.gua.nodes.SunLightNode(
+	# 	Name = "sun",
+	# 	Color = avango.gua.Color(1, 1, 1),
+	# 	Transform = avango.gua.make_rot_mat(-45, 1, 0, 0),
+	# 	EnableShadows = True
+	# )
+
+	# graph.Root.value.Children.value.append(sun)
+
+	light = avango.gua.nodes.PointLightNode(
+		Name = "light",
+		Color = avango.gua.Color(1,1,1),
+		Transform = avango.gua.make_trans_mat(0, 0.25, 0) * avango.gua.make_scale_mat(5),
+		EnableSpecularShading = False,
 		EnableShadows = True
 	)
-
-	graph.Root.value.Children.value.append(sun)
+	eye.Children.value.append(light)
 
 	guaVE = GuaVE()
 	guaVE.start(locals(), globals())
