@@ -81,19 +81,16 @@ class KeyController(avango.script.Script):
 		if self.Keyboard.Key1.value and not self.Key1:
 			self.TM.init_third_dim(self.TM.DEPTH)
 			self.TM.layout()
-			# self.controller3D.set_Position()
 		self.Key1 = self.Keyboard.Key1.value
 
 		if self.Keyboard.Key2.value and not self.Key2:
 			self.TM.init_third_dim(self.TM.LAST_ACCESSD)
 			self.TM.layout()
-			# self.controller3D.set_Position()
 		self.Key2 = self.Keyboard.Key2.value
 
 		if self.Keyboard.Key3.value and not self.Key3:
 			self.TM.init_third_dim(self.TM.LAST_MODIFIED)
 			self.TM.layout()
-			# self.controller3D.set_Position()
 		self.Key3 = self.Keyboard.Key3.value
 
 		if self.Keyboard.KeyF.value and not self.KeyF:
