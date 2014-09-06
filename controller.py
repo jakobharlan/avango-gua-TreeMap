@@ -69,7 +69,7 @@ class KeyController(avango.script.Script):
 		self.Key3 = False
 
 		self.KeyF = False
-		self.OnlyFolders = False
+		self.ShowFiles = False
 
 		self.KeyUp = False
 		self.KeyDown = False
@@ -94,9 +94,9 @@ class KeyController(avango.script.Script):
 		self.Key3 = self.Keyboard.Key3.value
 
 		if self.Keyboard.KeyF.value and not self.KeyF:
-			self.OnlyFolders = not self.OnlyFolders
+			self.ShowFiles = not self.ShowFiles
 			self.TM.clear_scenegraph_structure()
-			self.TM.create_scenegraph_structure(OnlyFolders = self.OnlyFolders)
+			self.TM.create_scenegraph_structure(ShowFiles = self.ShowFiles)
 		self.KeyF = self.Keyboard.KeyF.value
 
 		if self.Keyboard.KeyDown.value and not self.KeyDown:

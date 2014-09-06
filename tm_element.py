@@ -41,16 +41,21 @@ class TM_Element():
 			return self.input_entity.modified_time
 
 
-	def create_scenegraph_structure(self, OnlyFolders):
+	def create_scenegraph_structure(self, ShowFiles, UnderFocus = False):
+		underfocus = self.highlighted or UnderFocus
 		for child in self.children:
-			if not ((not child.input_entity.__class__ == folder) and OnlyFolders): 
-				self.transform.Children.value.append( child.create_scenegraph_structure(OnlyFolders) )
+			if child.input_entity.__class__ == folder:
+				self.transform.Children.value.append( child.create_scenegraph_structure(ShowFiles, underfocus) )
+			else:
+				if ShowFiles and underfocus:
+					self.transform.Children.value.append( child.create_scenegraph_structure(ShowFiles, underfocus) )
+
 		self.transform.Children.value.append(self.geometry)
 		return self.transform
 
 	def clear_scenegraph_structure(self):
+		self.transform.Children.value = []
 		for child in self.children:
-			self.transform.Children.value = []
 			child.clear_scenegraph_structure()
 
 	def highlight(self, highlight):
@@ -75,7 +80,7 @@ class TM_Element():
 
 	def select_material(self):
 		mimetype = mimetypes.guess_type(self.input_entity.path)[0]
-		mat = ""
+		mat = "data/materials/Grey"
 		if self.input_entity.__class__ == folder:
 			mat = "data/materials/Orange"
 
@@ -86,9 +91,7 @@ class TM_Element():
 				mat = "data/materials/Red"
 			elif mimetype.startswith("application"):
 				mat = "data/materials/Yellow"
-		else:
-			mat = "data/materials/Grey"
-
+					
 		if self.highlighted:
 			mat = mat + "_bright.gmd"
 		else:
