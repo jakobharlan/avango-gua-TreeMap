@@ -164,11 +164,11 @@ def start():
 	light = avango.gua.nodes.PointLightNode(
 		Name = "light",
 		Color = avango.gua.Color(1,1,1),
-		Transform = avango.gua.make_trans_mat(0, 0.25, 0) * avango.gua.make_scale_mat(5),
-		EnableSpecularShading = False,
+		Transform = avango.gua.make_trans_mat(0, 3, 0) * avango.gua.make_scale_mat(5),
+		# EnableSpecularShading = False,
 		EnableShadows = True
 	)
-	eye.Children.value.append(light)
+	graph.Root.value.Children.value.append(light)
 
 	guaVE = GuaVE()
 	guaVE.start(locals(), globals())
