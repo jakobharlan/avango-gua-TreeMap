@@ -73,7 +73,7 @@ def start():
 	root = filesystemloader.load(sys.argv[1])
 	TM = Treemap()
 	TM.my_constructor(root)
-	TM.create_scenegraph_structure()
+	TM.create_scenegraph_structure(OnlyFolders = False)
 	graph.Root.value.Children.value.append(TM.root_node)
 	graph.update_cache()
 	TM.layout()
@@ -152,14 +152,23 @@ def start():
 	# graph.Root.value.Children.value.append(reference_cubes[3])
 
 	# Light for the Treemap
-	sun = avango.gua.nodes.SunLightNode(
-		Name = "sun",
-		Color = avango.gua.Color(1, 1, 1),
-		Transform = avango.gua.make_rot_mat(-45, 1, 0, 0),
+	# sun = avango.gua.nodes.SunLightNode(
+	# 	Name = "sun",
+	# 	Color = avango.gua.Color(1, 1, 1),
+	# 	Transform = avango.gua.make_rot_mat(-45, 1, 0, 0),
+	# 	EnableShadows = True
+	# )
+
+	# graph.Root.value.Children.value.append(sun)
+
+	light = avango.gua.nodes.PointLightNode(
+		Name = "light",
+		Color = avango.gua.Color(1,1,1),
+		Transform = avango.gua.make_trans_mat(0, 3, 0) * avango.gua.make_scale_mat(5),
+		# EnableSpecularShading = False,
 		EnableShadows = True
 	)
-
-	graph.Root.value.Children.value.append(sun)
+	graph.Root.value.Children.value.append(light)
 
 	guaVE = GuaVE()
 	guaVE.start(locals(), globals())
@@ -192,7 +201,7 @@ def printelement(nodetupel):
 	print nodetupel[0].Name.value
 	#print nodetupel[0]
 	# print nodetupel[0].Transform.value
-	print nodetupel[0].WorldTransform.value
+	# print nodetupel[0].WorldTransform.value
 
 
 if __name__ == '__main__':

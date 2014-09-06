@@ -28,6 +28,7 @@ class Treemap(avango.script.Script):
 			Transform = avango.gua.make_scale_mat(1, 0.02, 1)
 		)
 		self.focus_element = self.root
+		self.picked_element = self.root
 		self.init_dict()
 		self.init_third_dim(self.DEPTH)
 
@@ -104,11 +105,33 @@ class Treemap(avango.script.Script):
 
 	def focus(self, selector):
 		self.focus_element.highlight(False)
-		self.focus_element = self.elementdict[selector.Name.value]
+
+		current = self.elementdict[selector.Name.value]
+		if not current == self.picked_element:
+			self.picked_element = current
+			self.focus_element = current 
 		self.focus_element.highlight(True)
 		self.Focuspath.value = self.focus_element.input_entity.path
 
+	def focus_child(self):
+		current = self.picked_element
+		while not current.parent == None:
+			if current.parent == self.focus_element:
+				self.focus_element.highlight(False)
+				self.focus_element = current
+				self.focus_element.highlight(True)
+			current = current.parent
 
+	def focus_parent(self):
+		if not self.focus_element.parent == None:
+			self.focus_element.highlight(False)
+			self.focus_element = self.focus_element.parent
+			self.focus_element.highlight(True)
+			self.Focuspath.value = self.focus_element.input_entity.path
 
-	def create_scenegraph_structure(self):
-		self.root_node.Children.value.append(self.root.create_scenegraph_structure())
+	def create_scenegraph_structure(self, OnlyFolders = False):
+		self.root_node.Children.value.append(self.root.create_scenegraph_structure(OnlyFolders))
+
+	def clear_scenegraph_structure(self):
+		self.root_node.Children.value = []
+		self.root.clear_scenegraph_structure()

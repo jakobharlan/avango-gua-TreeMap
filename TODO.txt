@@ -1,11 +1,21 @@
 # important
-3D Navigation
-Sinnvolles 3tes Attribut
+
 Controller deaktivieren
 	improves performance
 	improves downray in 2d
 
+Core:
+	Möglichkeit Dateien nur für Focus und Kinder vom Focus anzuzeigen 
+	nur pfad zum treemap root
+
+Appearence:
+	Materials und beleuchtung so bearbeiten das es gut aussieht
+		Lichquelle in 2D auf fester höhe / sunlight maybe
+
 # nice to have
+
+möglichkeit für exlude, 
+	-sogar interaktiv ?
 Controller 2D out of Bounds abfrage weird
 
 # to much time
