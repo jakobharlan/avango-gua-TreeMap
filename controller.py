@@ -70,6 +70,8 @@ class KeyController(avango.script.Script):
 
 		self.KeyR = False
 		self.KeyE = False
+		self.KeyV = False
+		self.KeyC = False
 		self.ShowFiles = False
 
 		self.KeyUp = False
@@ -106,6 +108,14 @@ class KeyController(avango.script.Script):
 				self.TM.clear_scenegraph_structure()
 				self.TM.create_scenegraph_structure(ShowFiles = self.ShowFiles)
 		self.KeyR = self.Keyboard.KeyR.value
+
+		if self.Keyboard.KeyV.value and not self.KeyV:
+			self.TM.drill_down_at_focus()
+		self.KeyV = self.Keyboard.KeyV.value
+
+		if self.Keyboard.KeyC.value and not self.KeyC:
+			self.TM.remove_focus_element()
+		self.KeyC = self.Keyboard.KeyC.value
 
 		if self.Keyboard.KeyDown.value and not self.KeyDown:
 			self.TM.focus_parent()

@@ -6,6 +6,7 @@ Controller deaktivieren
 
 Core:
 	nur pfad zum treemap root
+	remember focus after scengraph reset
 
 main Picker durch geometrie darstellen,
 rayvisualisation ausschalten
@@ -16,8 +17,9 @@ Appearence:
 
 # nice to have
 
-möglichkeit für exlude, 
+möglichkeit für exlude bzw Drill Down. Focus ist neuer start 
 	-sogar interaktiv ?
+
 Controller 2D out of Bounds abfrage weird
 
 # to much time

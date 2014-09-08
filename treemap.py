@@ -4,6 +4,7 @@ import tm_element
 import avango
 import avango.gua
 import avango.script
+import filesystemloader
 
 
 
@@ -148,3 +149,30 @@ class Treemap(avango.script.Script):
 		self.root_node.Children.value = []
 		self.root.clear_scenegraph_structure()
 		self.elementdict = {}
+
+	def drill_down_at_focus(self):
+		self.clear_scenegraph_structure()
+		self.root = tm_element.TM_Element(self.focus_element.input_entity)
+		self.focus_element = self.root
+		self.picked_element = self.root
+		self.init_dict()
+		self.init_third_dim(self.DEPTH)
+		self.layout()
+		self.create_scenegraph_structure()
+
+	def remove_focus_element(self):
+		if not self.focus_element.input_entity.parent == None:
+			parent = self.focus_element.input_entity.parent
+			parent.children.remove(self.focus_element.input_entity)
+
+			filesystemloader.calc_folder_size(parent)
+
+			self.clear_scenegraph_structure()
+			self.root = tm_element.TM_Element(self.root.input_entity)
+			self.focus_element = self.root
+			self.picked_element = self.root
+			self.init_dict()
+			self.init_third_dim(self.DEPTH)
+			self.layout()
+			self.create_scenegraph_structure()
+
