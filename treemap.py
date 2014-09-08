@@ -129,6 +129,17 @@ class Treemap(avango.script.Script):
 			self.focus_element.highlight(True)
 			self.Focuspath.value = self.focus_element.input_entity.path
 
+	def show_files_under_focus(self):
+		new_show = not self.focus_element.show
+		elements = []
+		elements.append(self.focus_element)
+		
+		while not len(elements) == 0:
+			current = elements[0]
+			elements.remove(current)
+			current.show = new_show
+			elements.extend(current.children)
+
 	def create_scenegraph_structure(self, ShowFiles = False):
 		self.root_node.Children.value.append(self.root.create_scenegraph_structure(ShowFiles))
 		self.init_dict()

@@ -99,6 +99,9 @@ class KeyboardDevice(avango.script.Script):
     self.KeyS.value = self.device_sensor.Button11.value
     self.KeyD.value = self.device_sensor.Button12.value
 
+    self.KeyQ.value = self.device_sensor.Button0.value
+    self.KeyE.value = self.device_sensor.Button2.value
+    
     self.KeySTRG.value = self.device_sensor.Button26.value
     self.KeySHIFT.value = self.device_sensor.Button9.value
     self.KeySPACE.value = self.device_sensor.Button17.value
@@ -107,20 +110,19 @@ class KeyboardDevice(avango.script.Script):
     self.Key2.value = self.device_sensor.Button29.value
     self.Key3.value = self.device_sensor.Button18.value
 
+    self.KeyF.value = self.device_sensor.Button13.value
+    self.KeyR.value = self.device_sensor.Button3.value
+    
     self.KeyUp.value = self.device_sensor.Button30.value
     self.KeyDown.value = self.device_sensor.Button31.value
 
 
-    self.KeyQ.value = self.device_sensor.Button0.value
-    self.KeyE.value = self.device_sensor.Button2.value
-    self.KeyR.value = self.device_sensor.Button3.value
     self.KeyT.value = self.device_sensor.Button4.value
     self.KeyZ.value = self.device_sensor.Button5.value
     self.KeyU.value = self.device_sensor.Button6.value
     self.KeyI.value = self.device_sensor.Button7.value
     self.KeyO.value = self.device_sensor.Button8.value
     # self.KeyP.value = self.device_sensor.Button9.value
-    self.KeyF.value = self.device_sensor.Button13.value
     self.KeyG.value = self.device_sensor.Button14.value
     self.KeyH.value = self.device_sensor.Button15.value
     self.KeyJ.value = self.device_sensor.Button16.value

@@ -19,6 +19,7 @@ class TM_Element():
 				self.children.append(TM_Element(child,self))
 
 		self.highlighted = False
+		self.show = True
 		self.material = self.select_material()
 
 		loader = avango.gua.nodes.TriMeshLoader()
@@ -41,14 +42,13 @@ class TM_Element():
 			return self.input_entity.modified_time
 
 
-	def create_scenegraph_structure(self, ShowFiles, UnderFocus = False):
-		underfocus = self.highlighted or UnderFocus
+	def create_scenegraph_structure(self, ShowFiles):
 		for child in self.children:
 			if child.input_entity.__class__ == folder:
-				self.transform.Children.value.append( child.create_scenegraph_structure(ShowFiles, underfocus) )
+				self.transform.Children.value.append( child.create_scenegraph_structure(ShowFiles) )
 			else:
-				if ShowFiles and underfocus:
-					self.transform.Children.value.append( child.create_scenegraph_structure(ShowFiles, underfocus) )
+				if ShowFiles and self.show:
+					self.transform.Children.value.append( child.create_scenegraph_structure(ShowFiles) )
 
 		self.transform.Children.value.append(self.geometry)
 		return self.transform

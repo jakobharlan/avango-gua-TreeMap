@@ -5,8 +5,6 @@ Controller deaktivieren
 	improves downray in 2d
 
 Core:
-	Möglichkeit Dateien nur für Focus und Kinder vom Focus anzuzeigen - done
-		nun mehrere
 	nur pfad zum treemap root
 
 main Picker durch geometrie darstellen,
