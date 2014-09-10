@@ -32,6 +32,7 @@ class Treemap(avango.script.Script):
 		self.picked_element = self.root
 		self.init_dict()
 		self.init_third_dim(self.DEPTH)
+		self.show_files = True
 
 	def init_dict(self):
 		elements = []
@@ -141,8 +142,8 @@ class Treemap(avango.script.Script):
 			current.show = new_show
 			elements.extend(current.children)
 
-	def create_scenegraph_structure(self, ShowFiles = False):
-		self.root_node.Children.value.append(self.root.create_scenegraph_structure(ShowFiles))
+	def create_scenegraph_structure(self):
+		self.root_node.Children.value.append(self.root.create_scenegraph_structure(self.show_files))
 		self.init_dict()
 
 	def clear_scenegraph_structure(self):
@@ -150,9 +151,9 @@ class Treemap(avango.script.Script):
 		self.root.clear_scenegraph_structure()
 		self.elementdict = {}
 
-	def drill_down_at_focus(self):
+	def create_new_treemap_from(self, element):
 		self.clear_scenegraph_structure()
-		self.root = tm_element.TM_Element(self.focus_element.input_entity)
+		self.root = tm_element.TM_Element(element.input_entity)
 		self.focus_element = self.root
 		self.picked_element = self.root
 		self.init_dict()
@@ -165,14 +166,6 @@ class Treemap(avango.script.Script):
 			parent = self.focus_element.input_entity.parent
 			parent.children.remove(self.focus_element.input_entity)
 
-			filesystemloader.calc_folder_size(parent)
+			filesystemloader.calc_folder_size(self.root.input_entity)
 
-			self.clear_scenegraph_structure()
-			self.root = tm_element.TM_Element(self.root.input_entity)
-			self.focus_element = self.root
-			self.picked_element = self.root
-			self.init_dict()
-			self.init_third_dim(self.DEPTH)
-			self.layout()
-			self.create_scenegraph_structure()
-
+			self.create_new_treemap_from(self.root)

@@ -73,7 +73,7 @@ def start():
 	root = filesystemloader.load(sys.argv[1])
 	TM = Treemap()
 	TM.my_constructor(root)
-	TM.create_scenegraph_structure(ShowFiles = False)
+	TM.create_scenegraph_structure()
 	graph.Root.value.Children.value.append(TM.root_node)
 	graph.update_cache()
 	TM.layout()

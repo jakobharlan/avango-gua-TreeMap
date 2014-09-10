@@ -97,9 +97,9 @@ class KeyController(avango.script.Script):
 		self.Key3 = self.Keyboard.Key3.value
 
 		if self.Keyboard.KeyF.value and not self.KeyF:
-			self.ShowFiles = not self.ShowFiles
+			self.TM.show_files = not self.TM.show_files
 			self.TM.clear_scenegraph_structure()
-			self.TM.create_scenegraph_structure(ShowFiles = self.ShowFiles)
+			self.TM.create_scenegraph_structure()
 		self.KeyF = self.Keyboard.KeyF.value
 
 		if self.Keyboard.KeyR.value and not self.KeyR:
@@ -110,7 +110,7 @@ class KeyController(avango.script.Script):
 		self.KeyR = self.Keyboard.KeyR.value
 
 		if self.Keyboard.KeyV.value and not self.KeyV:
-			self.TM.drill_down_at_focus()
+			self.TM.create_new_treemap_from(self.TM.focus_element)
 		self.KeyV = self.Keyboard.KeyV.value
 
 		if self.Keyboard.KeyC.value and not self.KeyC:
