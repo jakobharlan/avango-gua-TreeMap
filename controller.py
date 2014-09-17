@@ -124,7 +124,7 @@ class Animation(avango.script.Script):
 				if progress > 0.5:
 					current_rotation = avango.gua.make_rot_mat(self.end_rotation)
 				else:
-					current_rotation = avango.gua.make_rot_mat(self.start_rotation.slerp_to(self.end_rotation, (progress - 0.5) * 2))
+					current_rotation = avango.gua.make_rot_mat(self.start_rotation.slerp_to(self.end_rotation, progress * 2))
 			else:
 				if progress < 0.5:
 					current_rotation = avango.gua.make_rot_mat(self.start_rotation)
