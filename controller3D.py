@@ -9,7 +9,8 @@ class Controller3D(avango.script.Script):
 	OutTransform.value = avango.gua.make_identity_mat()
 	Mouse = None
 	Keyboard = None
-	Position = avango.gua.SFVec3()
+	Position = avango.gua.Vec3()
+	Rotation = avango.gua.make_rot_mat(0, 0.0, 1.0, 0.0)
 	rel_rot_x = 0
 	rel_rot_y = 0
 	Picker = None
@@ -41,7 +42,7 @@ class Controller3D(avango.script.Script):
 		self.rel_rot_x += self.Mouse.RelX.value
 		self.rel_rot_y += self.Mouse.RelY.value
 
-		rotation = avango.gua.make_rot_mat(-self.rel_rot_x * self.horizontal_speed, 0.0, 1.0, 0.0) * \
+		self.Rotation = avango.gua.make_rot_mat(-self.rel_rot_x * self.horizontal_speed, 0.0, 1.0, 0.0) * \
 							 avango.gua.make_rot_mat(-self.rel_rot_y * self.vertical_speed, 1.0, 0.0, 0.0) #calc view rotation
 
 		self.viewing_direction = self.get_ray_direction(self.Picker.Ray.value, avango.gua.Vec3(0.00001, 0.00001, 5))
@@ -86,15 +87,15 @@ class Controller3D(avango.script.Script):
 			self.position_y = self.height + self.size
 
 
-		self.Position.value += avango.gua.Vec3(MovementX, 0, MovementZ)
+		self.Position += avango.gua.Vec3(MovementX, 0, MovementZ)
 
-		position_x = self.Position.value.x 						
-		position_z = self.Position.value.z
+		position_x = self.Position.x 						
+		position_z = self.Position.z
 
-		self.Position.value = avango.gua.Vec3(position_x, self.position_y, position_z)
+		self.Position = avango.gua.Vec3(position_x, self.position_y, position_z)
 
-		self.OutTransform.value = avango.gua.make_trans_mat(self.Position.value) * \
-															rotation
+		self.OutTransform.value = avango.gua.make_trans_mat(self.Position) * \
+															self.Rotation
 
 
 	def setPosition(self):
@@ -133,7 +134,7 @@ class Controller3D(avango.script.Script):
 		self.Move_Picker = Picker
 
 	def config_Down_Picker(self):
-		self.Down_Picker.Ray.value.Transform.value = avango.gua.make_trans_mat(self.Position.value.x, 5, self.Position.value.z) * \
+		self.Down_Picker.Ray.value.Transform.value = avango.gua.make_trans_mat(self.Position.x, 5, self.Position.z) * \
 																									avango.gua.make_rot_mat(-90, 1.0, 0.0, 0.0) * \
 																									avango.gua.make_scale_mat(0.00001, 0.00001, 10)
 
@@ -146,7 +147,7 @@ class Controller3D(avango.script.Script):
 			if moving_direction.x > 0:
 				angle = 360 - angle
 
-			self.Move_Picker.Ray.value.Transform.value = avango.gua.make_trans_mat(self.Position.value.x, self.Position.value.y - self.size+0.0001, self.Position.value.z) * \
+			self.Move_Picker.Ray.value.Transform.value = avango.gua.make_trans_mat(self.Position.x, self.Position.y - self.size+0.0001, self.Position.z) * \
 																								avango.gua.make_rot_mat(int(angle), 0.0, 1.0, 0.0) * \
 																								avango.gua.make_scale_mat(0.00001, 0.00001, 5)	
 
