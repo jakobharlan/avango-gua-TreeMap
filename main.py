@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import filesystemloader
 from treemap import Treemap
+import treemap_tutorial
 from controller import Navigator, KeyController
 from picker import Picker, FocusUpdater
 from Text import TextField
@@ -70,6 +71,7 @@ def start():
 	# graph.Root.value.Children.value.append(TMtest)
 
 	## Setup visualization-------------------
+	print treemap_tutorial.create_tutorial()
 	root = filesystemloader.load(sys.argv[1])
 	TM = Treemap()
 	TM.my_constructor(root)
