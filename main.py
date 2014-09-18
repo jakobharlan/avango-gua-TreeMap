@@ -60,7 +60,7 @@ def start():
 		EnableRayDisplay = True,
 		EnableFPSDisplay = True,
 		EnableBackfaceCulling = False,
-		NearClip = 0.001
+		NearClip = 0.0001
 	)
 	# pipe.BackgroundTexture.value = "data/textures/skymap.jpg"
 	# pipe.BackgroundMode.value = avango.gua.BackgroundMode.SKYMAP_TEXTURE
@@ -100,7 +100,7 @@ def start():
 	TM_Picker.PickedSceneGraph.value = graph
 	pick_ray = avango.gua.nodes.RayNode(Name = "pick_ray")
 	pick_ray.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0) * \
-														 avango.gua.make_scale_mat(0.0001, 0.0001, 5)
+														 avango.gua.make_scale_mat(0.00001, 0.00001, 5)
 	eye.Children.value.append(pick_ray)
 	TM_Picker.Ray.value = pick_ray
 
@@ -116,7 +116,7 @@ def start():
 	pick_ray = avango.gua.nodes.RayNode(Name = "down_pick_ray")
 	pick_ray.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0) * \
 														 avango.gua.make_rot_mat(-10, 1.0, 0.0, 0.0) * \
-														 avango.gua.make_scale_mat(0.0005, 0.0005, 5)
+														 avango.gua.make_scale_mat(0.00001, 0.00001, 5)
 	graph.Root.value.Children.value.append(pick_ray)
 	Down_Picker.Ray.value = pick_ray
 
@@ -127,7 +127,7 @@ def start():
 	pick_ray = avango.gua.nodes.RayNode(Name = "move_pick_ray")
 	pick_ray.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0) * \
 														 avango.gua.make_rot_mat(0, 0.0, 1.0, 0.0) * \
-														 avango.gua.make_scale_mat(0.0005, 0.0005, 5)
+														 avango.gua.make_scale_mat(0.00001, 0.00001, 5)
 	graph.Root.value.Children.value.append(pick_ray)
 	Move_Picker.Ray.value = pick_ray
 
