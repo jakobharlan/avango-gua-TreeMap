@@ -24,6 +24,7 @@ class Treemap(avango.script.Script):
 
 	def my_constructor(self, root):
 		self.root = tm_element.TM_Element(root)
+		self.very_root_entity = root
 		self.root_node = avango.gua.nodes.TransformNode(
 			Name = "TreeMapRoot",
 			Transform = avango.gua.make_scale_mat(1, 0.02, 1)
@@ -151,15 +152,19 @@ class Treemap(avango.script.Script):
 		self.root.clear_scenegraph_structure()
 		self.elementdict = {}
 
-	def create_new_treemap_from(self, element):
-		self.clear_scenegraph_structure()
-		self.root = tm_element.TM_Element(element.input_entity)
-		self.focus_element = self.root
-		self.picked_element = self.root
-		self.init_dict()
-		self.init_third_dim(self.DEPTH)
-		self.layout()
-		self.create_scenegraph_structure()
+	def create_new_treemap_from(self, entity):
+		if entity.__class__ == tm_element.folder:
+			self.clear_scenegraph_structure()
+			self.root = tm_element.TM_Element(entity)
+			filesystemloader.calc_folder_size(self.root.input_entity)
+			self.focus_element = self.root
+			self.picked_element = self.root
+			self.init_dict()
+			self.init_third_dim(self.DEPTH)
+			self.layout()
+			self.create_scenegraph_structure()
+		else:
+			print "cant create treemap from file, try again with folder"
 
 	def remove_focus_element(self):
 		if not self.focus_element.input_entity.parent == None:
@@ -168,4 +173,26 @@ class Treemap(avango.script.Script):
 
 			filesystemloader.calc_folder_size(self.root.input_entity)
 
-			self.create_new_treemap_from(self.root)
+			self.create_new_treemap_from(self.root.input_entity)
+
+	def create_parent_treemap(self):
+		if self.root.input_entity.parent != None:
+			self.create_new_treemap_from(self.root.input_entity.parent)
+		else:
+			print "requested folder is over the one you started with"
+	
+	def reload_file_system(self):
+		old_root_path = self.root.input_entity.path		
+		new_root_entity = filesystemloader.load(self.very_root_entity.path)
+		self.root = tm_element.TM_Element(new_root_entity)
+		
+		elements = [self.root]
+		while not len(elements) == 0:
+			current = elements[0]
+			elements.remove(current)
+			if current.input_entity.path == old_root_path:
+				self.create_new_treemap_from(current.input_entity)
+				elements = []
+			else:
+				elements.extend(current.children)
+		

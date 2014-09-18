@@ -64,6 +64,7 @@ def init_keyboard():
 		keyboard.buttons[13] = "EV_KEY::KEY_F"
 		keyboard.buttons[22] = "EV_KEY::KEY_V"
 		keyboard.buttons[21] = "EV_KEY::KEY_C"
+		keyboard.buttons[5] = "EV_KEY::KEY_Y"
 		
 		keyboard.buttons[30] = "EV_KEY::KEY_UP"
 		keyboard.buttons[31] = "EV_KEY::KEY_DOWN"
@@ -71,7 +72,7 @@ def init_keyboard():
 
 
 		keyboard.buttons[4] = "EV_KEY::KEY_T"
-		keyboard.buttons[5] = "EV_KEY::KEY_Z"
+		keyboard.buttons[19] = "EV_KEY::KEY_Z"
 		keyboard.buttons[6] = "EV_KEY::KEY_U"
 		keyboard.buttons[7] = "EV_KEY::KEY_I"
 		keyboard.buttons[8] = "EV_KEY::KEY_O"
@@ -81,7 +82,6 @@ def init_keyboard():
 		keyboard.buttons[16] = "EV_KEY::KEY_J"
 		# keyboard.buttons[17] = "EV_KEY::KEY_K"
 		# keyboard.buttons[18] = "EV_KEY::KEY_L"
-		keyboard.buttons[19] = "EV_KEY::KEY_Y"
 		keyboard.buttons[20] = "EV_KEY::KEY_X"
 		keyboard.buttons[23] = "EV_KEY::KEY_B"
 		keyboard.buttons[24] = "EV_KEY::KEY_N"

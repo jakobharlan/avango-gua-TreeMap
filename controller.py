@@ -72,6 +72,8 @@ class KeyController(avango.script.Script):
 		self.KeyE = False
 		self.KeyV = False
 		self.KeyC = False
+		self.KeyX = False
+		self.KeyY = False
 		self.ShowFiles = False
 
 		self.KeyUp = False
@@ -110,7 +112,7 @@ class KeyController(avango.script.Script):
 		self.KeyR = self.Keyboard.KeyR.value
 
 		if self.Keyboard.KeyV.value and not self.KeyV:
-			self.TM.create_new_treemap_from(self.TM.focus_element)
+			self.TM.create_new_treemap_from(self.TM.focus_element.input_entity)
 		self.KeyV = self.Keyboard.KeyV.value
 
 		if self.Keyboard.KeyC.value and not self.KeyC:
@@ -124,3 +126,11 @@ class KeyController(avango.script.Script):
 		if self.Keyboard.KeyUp.value and not self.KeyUp:
 			self.TM.focus_child()
 		self.KeyUp = self.Keyboard.KeyUp.value
+
+		if self.Keyboard.KeyX.value and not self.KeyX:
+			self.TM.create_parent_treemap()
+		self.KeyX = self.Keyboard.KeyX.value
+
+		if self.Keyboard.KeyY.value and not self.KeyY:
+			self.TM.reload_file_system()
+		self.KeyY = self.Keyboard.KeyY.value
