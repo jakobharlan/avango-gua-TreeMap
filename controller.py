@@ -49,13 +49,13 @@ class Navigator(avango.script.Script):
 		self.running_animation = True
 		# print "Position2D" + str(self.controller2D.Position)
 		# print "Position3D" + str(self.controller3D.Position)
-
 		if self.Is_overview_modus.value:
+			self.controller3D.Mouse = None
+
 			self.controller2D.Position.x = self.controller3D.Position.x
 			self.controller2D.Position.z = self.controller3D.Position.z
 			start_position = self.controller3D.Position
 			end_position = self.controller2D.Position
-
 
 			start_rotation = self.controller3D.Rotation.get_rotate()
 			end_rotation = avango.gua.make_rot_mat(-90, 1, 0, 0).get_rotate()
@@ -91,6 +91,7 @@ class Navigator(avango.script.Script):
 			self.OutTransform.connect_from(self.controller2D.OutTransform)
 		else:
 			self.OutTransform.connect_from(self.controller3D.OutTransform)
+			self.controller3D.setMouse(self.Mouse)
 		self.running_animation = False
 
 class Animation(avango.script.Script):

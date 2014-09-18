@@ -39,8 +39,15 @@ class Controller3D(avango.script.Script):
 
 		self.config_Down_Picker()	#sets the down picker
 
-		self.rel_rot_x += self.Mouse.RelX.value
-		self.rel_rot_y += self.Mouse.RelY.value
+		if self.Mouse == None:
+			rel_rot_x = 0
+			rel_rot_y = 0
+		else:
+			rel_rot_x = self.Mouse.RelX.value
+			rel_rot_y = self.Mouse.RelY.value
+
+		self.rel_rot_x += rel_rot_x
+		self.rel_rot_y += rel_rot_y
 
 		self.Rotation = avango.gua.make_rot_mat(-self.rel_rot_x * self.horizontal_speed, 0.0, 1.0, 0.0) * \
 							 avango.gua.make_rot_mat(-self.rel_rot_y * self.vertical_speed, 1.0, 0.0, 0.0) #calc view rotation
