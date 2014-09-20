@@ -30,6 +30,8 @@ class Treemap(avango.script.Script):
 			Transform = avango.gua.make_scale_mat(1, 0.02, 1)
 		)
 		self.focus_element = self.root
+		self.focus(self.root)
+		self.selecting_element = -1
 		self.picked_element = self.root
 		self.init_dict()
 		self.init_third_dim(self.DEPTH)
@@ -107,14 +109,19 @@ class Treemap(avango.script.Script):
 			elements.extend(current.children)
 
 	def focus(self, selector):
-		self.focus_element.highlight(False)
-
-		current = self.elementdict[selector.Name.value]
-		if not current == self.picked_element:
-			self.picked_element = current
-			self.focus_element = current 
-		self.focus_element.highlight(True)
-		self.Focuspath.value = self.focus_element.input_entity.path
+		if selector.__class__ == tm_element.TM_Element:
+			self.focus_element.highlight(False)
+			self.focus_element = selector
+			self.Focuspath.value = self.focus_element.input_entity.path
+			self.focus_element.highlight(True)
+		else:
+			current = self.elementdict[selector.Name.value]
+			if not current == self.picked_element:
+				self.focus_element.highlight(False)
+				self.picked_element = current
+				self.focus_element = current 
+				self.Focuspath.value = self.focus_element.input_entity.path
+				self.focus_element.highlight(True)
 
 	def focus_child(self):
 		current = self.picked_element
@@ -125,9 +132,52 @@ class Treemap(avango.script.Script):
 				self.focus_element.highlight(True)
 			current = current.parent
 
-	def focus_parent(self):
+	def select_next_element(self):
+		if not self.selecting_element == -1:
+			self.focus_element.children[self.selecting_element].highlight(False)
+			children_count = len(self.focus_element.children)
+			if not children_count == 0:
+				self.selecting_element += 1
+				if self.selecting_element == children_count:
+					self.selecting_element = 0
+				self.focus_element.children[self.selecting_element].highlight(True)
+				self.Focuspath.value = self.focus_element.children[self.selecting_element].input_entity.path
+		else:
+			if not len(self.focus_element.children) == 0:
+				self.selecting_element = 0
+				self.focus_element.children[self.selecting_element].highlight(True)
+				self.Focuspath.value = self.focus_element.children[self.selecting_element].input_entity.path
+
+	def select_prev_element(self):
+		children_count = len(self.focus_element.children)
+		if not self.selecting_element == -1:
+			self.focus_element.children[self.selecting_element].highlight(False)
+			if not children_count == 0:
+				self.selecting_element -= 1
+				if self.selecting_element == -1:
+					self.selecting_element = children_count-1
+				self.focus_element.children[self.selecting_element].highlight(True)
+				self.Focuspath.value = self.focus_element.children[self.selecting_element].input_entity.path
+		else:
+			if not len(self.focus_element.children) == 0:
+				self.selecting_element = children_count-1
+				self.focus_element.children[self.selecting_element].highlight(True)
+				self.Focuspath.value = self.focus_element.children[self.selecting_element].input_entity.path
+
+	def focus_down_at_selected_element(self):
+		if not self.selecting_element == -1:
+			self.focus_element.highlight(False)
+			self.focus_element.children[self.selecting_element].highlight(False)
+			self.focus_element = self.focus_element.children[self.selecting_element]
+			self.focus_element.highlight(True)
+			self.selecting_element = -1
+
+	def focus_level_up(self):
 		if not self.focus_element.parent == None:
 			self.focus_element.highlight(False)
+			if not self.selecting_element == -1:
+				self.focus_element.children[self.selecting_element].highlight(False)
+			self.selecting_element = -1
 			self.focus_element = self.focus_element.parent
 			self.focus_element.highlight(True)
 			self.Focuspath.value = self.focus_element.input_entity.path
@@ -158,6 +208,8 @@ class Treemap(avango.script.Script):
 			self.root = tm_element.TM_Element(entity)
 			filesystemloader.calc_folder_size(self.root.input_entity)
 			self.focus_element = self.root
+			self.focus(self.root)
+			self.selecting_element = -1
 			self.picked_element = self.root
 			self.init_dict()
 			self.init_third_dim(self.DEPTH)

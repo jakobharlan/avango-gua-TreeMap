@@ -106,7 +106,7 @@ def start():
 
 	navigator.setPicker(TM_Picker)
 
-	## Fucus Updater
+	## Focus Updater
 	focuser = FocusUpdater()
 	focuser.setTreeMap(TM)
 	focuser.Results.connect_from(TM_Picker.Results)
