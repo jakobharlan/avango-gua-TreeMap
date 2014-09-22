@@ -76,11 +76,19 @@ class ControllerOut(avango.script.Script):
 		# 			self.Position.z < 0.48 and
 		# 			self.Position.z > -0.48):
 	
+		positiony = self.Position.y
+
 		if self.Keyboard != None:
 			if self.Keyboard.KeyA.value:
 				self.angle.value += 1
-			elif self.Keyboard.KeyD.value:
+			if self.Keyboard.KeyD.value:
 				self.angle.value -= 1
+			if self.Keyboard.KeyQ.value and self.distance > 0.3:
+				self.distance -= 0.01
+				positiony -= 0.01
+			if self.Keyboard.KeyE.value and self.distance > 0.3:
+				self.distance += 0.01
+				positiony += 0.01
 
 
 		positionx = math.cos(( ( 2*math.pi )/360 ) * self.angle.value)
@@ -90,6 +98,7 @@ class ControllerOut(avango.script.Script):
 		# print "z"+str(positionz * self.distance)
 
 		self.Position.x = positionx * self.distance
+		self.Position.y = positiony
 		self.Position.z = positionz * self.distance
 
 		self.Rotation = avango.gua.make_rot_mat(-(self.angle.value -90), 0.0, 1.0, 0.0) * \
