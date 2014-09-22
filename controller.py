@@ -4,6 +4,7 @@ import avango.script
 from avango.script import field_has_changed
 from controller2D import Controller2D
 from controller3D import Controller3D
+from controllerOut import ControllerOut
 import device
 import time
 
@@ -11,10 +12,12 @@ import avango.gua
 
 
 class Navigator(avango.script.Script):
-	Is_overview_modus = avango.SFBool()
-	Is_overview_modus.value = True
+	modus = avango.SFInt()
+	Is_patrick_modus = avango.SFBool()
+	modus.value = 0
 	controller2D = Controller2D()
 	controller3D = Controller3D()
+	controllerOut = ControllerOut()
 	OutTransform = avango.gua.SFMatrix4()
 	OutTransform.value = avango.gua.make_identity_mat()
 	Keyboard = device.KeyboardDevice()
@@ -30,6 +33,7 @@ class Navigator(avango.script.Script):
 		self.always_evaluate(True)
 		self.OutTransform.connect_from(self.controller2D.OutTransform)
 		self.KeySTRG = False
+		self.KeyALT = False
 
 		self.controller2D.setKeyboard(self.Keyboard)
 		self.controller3D.setMouse(self.Mouse)
@@ -44,12 +48,12 @@ class Navigator(avango.script.Script):
 		self.controller3D.setPicker(self.Picker)
 
 
-	@field_has_changed(Is_overview_modus)
+	@field_has_changed(modus)
 	def update_mode(self):
 		self.running_animation = True
 		# print "Position2D" + str(self.controller2D.Position)
 		# print "Position3D" + str(self.controller3D.Position)
-		if self.Is_overview_modus.value:
+		if self.modus.value == 0:
 			self.controller3D.Mouse = None
 
 			self.controller2D.Position.x = self.controller3D.Position.x
@@ -62,9 +66,9 @@ class Navigator(avango.script.Script):
 
 			self.OutTransform.disconnect_from(self.controller3D.OutTransform)
 			animation = Animation()
-			animation.my_constructor(start_position, end_position, start_rotation, end_rotation, self.animation_ended, 3.0)
+			animation.my_constructor(start_position, end_position, start_rotation, end_rotation, self.animation_ended, True, 1.0)
 			self.OutTransform.connect_from(animation.OutTransform)
-		else:
+		elif self.modus.value == 1:
 			self.controller3D.Position.x = self.controller2D.Position.x
 			self.controller3D.Position.z = self.controller2D.Position.z
 			start_position = self.controller2D.Position
@@ -76,22 +80,53 @@ class Navigator(avango.script.Script):
 			self.controller3D.height = self.controller2D.zoom - self.Picker.Results.value[0].Distance.value * 5
 			self.OutTransform.disconnect_from(self.controller2D.OutTransform)
 			animation = Animation()
-			animation.my_constructor(start_position, end_position, start_rotation, end_rotation, self.animation_ended, False, 3.0)
+			animation.my_constructor(start_position, end_position, start_rotation, end_rotation, self.animation_ended, False, 1.0)
 			self.OutTransform.connect_from(animation.OutTransform)
+		elif self.modus.value == 2:
+			self.controller2D.Keyboard = None
+			self.controller3D.Mouse = None
+			self.controller3D.Keyboard = None
+
+
+			self.OutTransform.disconnect_from(self.controller2D.OutTransform)
+			self.OutTransform.disconnect_from(self.controller3D.OutTransform)
+
+			self.OutTransform.connect_from(self.controllerOut.OutTransform)
+			self.controllerOut.setKeyboard(self.Keyboard)
+			self.running_animation = False
 
 	def evaluate(self):
 		if not self.running_animation:
 			if self.Keyboard.KeySTRG.value and not self.KeySTRG:
-				self.Is_overview_modus.value = not self.Is_overview_modus.value
+				if self.modus.value == 0:
+					self.modus.value = 1
+					print "3D"
+				else:
+					self.modus.value = 0
+					print "2D"
+			elif self.Keyboard.KeyALT.value and not self.KeyALT:
+				if self.modus.value == 0 or self.modus.value == 1:
+					self.modus.value = 2
+					print "overview"
+				else:
+					self.modus.value = 0
+					print "2D"
 			self.KeySTRG = self.Keyboard.KeySTRG.value
+			self.KeyALT = self.Keyboard.KeyALT.value
+
+			# if self.Keyboard.KeyALT.value and not self.KeyALT:
+			# 	self.Is_patrick_modus.value = not self.Is_patrick_modus.value
+			# self.KeyALT = self.Keyboard.KeyALT.value
 
 	def animation_ended(self):
 		self.OutTransform.disconnect()
-		if self.Is_overview_modus.value:
+		if self.modus.value == 0:
 			self.OutTransform.connect_from(self.controller2D.OutTransform)
-		else:
+			self.controller2D.setKeyboard(self.Keyboard)
+		elif self.modus.value == 1:
 			self.OutTransform.connect_from(self.controller3D.OutTransform)
 			self.controller3D.setMouse(self.Mouse)
+			self.controller3D.setKeyboard(self.Keyboard)
 		self.running_animation = False
 
 class Animation(avango.script.Script):

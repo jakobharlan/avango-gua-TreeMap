@@ -66,10 +66,11 @@ class KeyboardDevice(avango.script.Script):
   KeyV = avango.SFBool()
   KeyB = avango.SFBool()
   KeyN = avango.SFBool()
-  KeyM = avango.SFBool()
+  # KeyM = avango.SFBool()
 
   KeySTRG = avango.SFBool()
   KeySHIFT = avango.SFBool()
+  KeyALT = avango.SFBool()
   KeySPACE = avango.SFBool()
   # KeyPgDown = avango.SFBool()
 
@@ -105,6 +106,7 @@ class KeyboardDevice(avango.script.Script):
     self.KeyE.value = self.device_sensor.Button2.value
     
     self.KeySTRG.value = self.device_sensor.Button26.value
+    self.KeyALT.value = self.device_sensor.Button25.value
     self.KeySHIFT.value = self.device_sensor.Button9.value
     self.KeySPACE.value = self.device_sensor.Button17.value
     
@@ -123,8 +125,9 @@ class KeyboardDevice(avango.script.Script):
     self.KeyLeft.value = self.device_sensor.Button27.value
     self.KeyRight.value = self.device_sensor.Button8.value
 
-
     self.KeyT.value = self.device_sensor.Button4.value
+
+
     self.KeyZ.value = self.device_sensor.Button5.value
     self.KeyU.value = self.device_sensor.Button6.value
     self.KeyI.value = self.device_sensor.Button7.value
@@ -138,7 +141,7 @@ class KeyboardDevice(avango.script.Script):
     self.KeyX.value = self.device_sensor.Button20.value
     self.KeyB.value = self.device_sensor.Button23.value
     self.KeyN.value = self.device_sensor.Button24.value
-    self.KeyM.value = self.device_sensor.Button25.value
+    # self.KeyM.value = self.device_sensor.Button25.value
 
     # self.KeyPgDown.value = self.device_sensor.Button27.value
 

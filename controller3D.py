@@ -55,43 +55,44 @@ class Controller3D(avango.script.Script):
 		self.viewing_direction = self.get_ray_direction(self.Picker.Ray.value, avango.gua.Vec3(0.00001, 0.00001, 5))
 
 
-		if self.Keyboard.KeyW.value:
-			MovementX += 1 * self.walkspeed.value * self.viewing_direction.x
-			MovementZ += 1 * self.walkspeed.value * self.viewing_direction.z
+		if self.Keyboard != None:
+			if self.Keyboard.KeyW.value:
+				MovementX += 1 * self.walkspeed.value * self.viewing_direction.x
+				MovementZ += 1 * self.walkspeed.value * self.viewing_direction.z
 
-		if self.Keyboard.KeyA.value:
-			MovementX += 0.3 * self.walkspeed.value * self.viewing_direction.z
-			MovementZ += -0.3 * self.walkspeed.value * self.viewing_direction.x
+			if self.Keyboard.KeyA.value:
+				MovementX += 0.3 * self.walkspeed.value * self.viewing_direction.z
+				MovementZ += -0.3 * self.walkspeed.value * self.viewing_direction.x
 
-		if self.Keyboard.KeyS.value:
-			MovementX += -1 * self.walkspeed.value * self.viewing_direction.x
-			MovementZ += -1 * self.walkspeed.value * self.viewing_direction.z
+			if self.Keyboard.KeyS.value:
+				MovementX += -1 * self.walkspeed.value * self.viewing_direction.x
+				MovementZ += -1 * self.walkspeed.value * self.viewing_direction.z
 
-		if self.Keyboard.KeyD.value:
-			MovementX += -0.3 * self.walkspeed.value * self.viewing_direction.z
-			MovementZ += 0.3 * self.walkspeed.value * self.viewing_direction.x
+			if self.Keyboard.KeyD.value:
+				MovementX += -0.3 * self.walkspeed.value * self.viewing_direction.z
+				MovementZ += 0.3 * self.walkspeed.value * self.viewing_direction.x
 
-		if self.Keyboard.KeySHIFT.value and not self.is_falling:
-			MovementX *= self.run_speed
-			MovementZ *= self.run_speed
+			if self.Keyboard.KeySHIFT.value and not self.is_falling:
+				MovementX *= self.run_speed
+				MovementZ *= self.run_speed
 
-		if self.is_falling:
-			MovementX *= 0.4
-			MovementZ *= 0.4
+			if self.is_falling:
+				MovementX *= 0.4
+				MovementZ *= 0.4
 
-		self.config_Move_Picker(MovementX, MovementZ)
-		if len(self.Move_Picker.Results.value) > 0:
-			movement_speed = math.sqrt(math.pow(MovementX, 2) + math.pow(MovementZ, 2))
-			if self.Move_Picker.Results.value[0].Distance.value < movement_speed:
-				MovementX = 0
-				MovementZ = 0
+			self.config_Move_Picker(MovementX, MovementZ)
+			if len(self.Move_Picker.Results.value) > 0:
+				movement_speed = math.sqrt(math.pow(MovementX, 2) + math.pow(MovementZ, 2))
+				if self.Move_Picker.Results.value[0].Distance.value < movement_speed:
+					MovementX = 0
+					MovementZ = 0
 
-		if not self.Keyboard.KeySPACE.value:
-			if len(self.Down_Picker.Results.value) > 0:
-				self.setPosition()
-		else:
-			self.height += self.ascend_speed
-			self.position_y = self.height + self.size
+			if not self.Keyboard.KeySPACE.value:
+				if len(self.Down_Picker.Results.value) > 0:
+					self.setPosition()
+			else:
+				self.height += self.ascend_speed
+				self.position_y = self.height + self.size
 
 
 		self.Position += avango.gua.Vec3(MovementX, 0, MovementZ)

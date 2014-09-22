@@ -72,6 +72,8 @@ def init_keyboard():
 		keyboard.buttons[27] = "EV_KEY::KEY_LEFT"
 		keyboard.buttons[8] = "EV_KEY::KEY_RIGHT"
 
+		keyboard.buttons[25] = "EV_KEY::KEY_LEFTALT"
+		keyboard.buttons[4] = "EV_KEY::KEY_T"
 
 
 		keyboard.buttons[4] = "EV_KEY::KEY_T"
@@ -87,7 +89,7 @@ def init_keyboard():
 		# keyboard.buttons[18] = "EV_KEY::KEY_L"
 		keyboard.buttons[23] = "EV_KEY::KEY_B"
 		keyboard.buttons[24] = "EV_KEY::KEY_N"
-		keyboard.buttons[25] = "EV_KEY::KEY_M"
+		# keyboard.buttons[25] = "EV_KEY::KEY_M"
 
 
 
