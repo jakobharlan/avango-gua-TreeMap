@@ -24,11 +24,14 @@ class Treemap(avango.script.Script):
 
 	def my_constructor(self, root):
 		self.root = tm_element.TM_Element(root)
+		self.very_root_entity = root
 		self.root_node = avango.gua.nodes.TransformNode(
 			Name = "TreeMapRoot",
 			Transform = avango.gua.make_scale_mat(1, 0.02, 1)
 		)
 		self.focus_element = self.root
+		self.focus(self.root)
+		self.selecting_element = -1
 		self.picked_element = self.root
 		self.init_dict()
 		self.init_third_dim(self.DEPTH)
@@ -106,14 +109,19 @@ class Treemap(avango.script.Script):
 			elements.extend(current.children)
 
 	def focus(self, selector):
-		self.focus_element.highlight(False)
-
-		current = self.elementdict[selector.Name.value]
-		if not current == self.picked_element:
-			self.picked_element = current
-			self.focus_element = current 
-		self.focus_element.highlight(True)
-		self.Focuspath.value = self.focus_element.input_entity.path
+		if selector.__class__ == tm_element.TM_Element:
+			self.focus_element.highlight(False)
+			self.focus_element = selector
+			self.Focuspath.value = self.focus_element.input_entity.path
+			self.focus_element.highlight(True)
+		else:
+			current = self.elementdict[selector.Name.value]
+			if not current == self.picked_element:
+				self.focus_element.highlight(False)
+				self.picked_element = current
+				self.focus_element = current 
+				self.Focuspath.value = self.focus_element.input_entity.path
+				self.focus_element.highlight(True)
 
 	def focus_child(self):
 		current = self.picked_element
@@ -124,9 +132,52 @@ class Treemap(avango.script.Script):
 				self.focus_element.highlight(True)
 			current = current.parent
 
-	def focus_parent(self):
+	def select_next_element(self):
+		if not self.selecting_element == -1:
+			self.focus_element.children[self.selecting_element].highlight(False)
+			children_count = len(self.focus_element.children)
+			if not children_count == 0:
+				self.selecting_element += 1
+				if self.selecting_element == children_count:
+					self.selecting_element = 0
+				self.focus_element.children[self.selecting_element].highlight(True)
+				self.Focuspath.value = self.focus_element.children[self.selecting_element].input_entity.path
+		else:
+			if not len(self.focus_element.children) == 0:
+				self.selecting_element = 0
+				self.focus_element.children[self.selecting_element].highlight(True)
+				self.Focuspath.value = self.focus_element.children[self.selecting_element].input_entity.path
+
+	def select_prev_element(self):
+		children_count = len(self.focus_element.children)
+		if not self.selecting_element == -1:
+			self.focus_element.children[self.selecting_element].highlight(False)
+			if not children_count == 0:
+				self.selecting_element -= 1
+				if self.selecting_element == -1:
+					self.selecting_element = children_count-1
+				self.focus_element.children[self.selecting_element].highlight(True)
+				self.Focuspath.value = self.focus_element.children[self.selecting_element].input_entity.path
+		else:
+			if not len(self.focus_element.children) == 0:
+				self.selecting_element = children_count-1
+				self.focus_element.children[self.selecting_element].highlight(True)
+				self.Focuspath.value = self.focus_element.children[self.selecting_element].input_entity.path
+
+	def focus_down_at_selected_element(self):
+		if not self.selecting_element == -1:
+			self.focus_element.highlight(False)
+			self.focus_element.children[self.selecting_element].highlight(False)
+			self.focus_element = self.focus_element.children[self.selecting_element]
+			self.focus_element.highlight(True)
+			self.selecting_element = -1
+
+	def focus_level_up(self):
 		if not self.focus_element.parent == None:
 			self.focus_element.highlight(False)
+			if not self.selecting_element == -1:
+				self.focus_element.children[self.selecting_element].highlight(False)
+			self.selecting_element = -1
 			self.focus_element = self.focus_element.parent
 			self.focus_element.highlight(True)
 			self.Focuspath.value = self.focus_element.input_entity.path
@@ -151,15 +202,21 @@ class Treemap(avango.script.Script):
 		self.root.clear_scenegraph_structure()
 		self.elementdict = {}
 
-	def create_new_treemap_from(self, element):
-		self.clear_scenegraph_structure()
-		self.root = tm_element.TM_Element(element.input_entity)
-		self.focus_element = self.root
-		self.picked_element = self.root
-		self.init_dict()
-		self.init_third_dim(self.DEPTH)
-		self.layout()
-		self.create_scenegraph_structure()
+	def create_new_treemap_from(self, entity):
+		if entity.__class__ == tm_element.folder:
+			self.clear_scenegraph_structure()
+			self.root = tm_element.TM_Element(entity)
+			filesystemloader.calc_folder_size(self.root.input_entity)
+			self.focus_element = self.root
+			self.focus(self.root)
+			self.selecting_element = -1
+			self.picked_element = self.root
+			self.init_dict()
+			self.init_third_dim(self.DEPTH)
+			self.layout()
+			self.create_scenegraph_structure()
+		else:
+			print "cant create treemap from file, try again with folder"
 
 	def remove_focus_element(self):
 		if not self.focus_element.input_entity.parent == None:
@@ -168,4 +225,26 @@ class Treemap(avango.script.Script):
 
 			filesystemloader.calc_folder_size(self.root.input_entity)
 
-			self.create_new_treemap_from(self.root)
+			self.create_new_treemap_from(self.root.input_entity)
+
+	def create_parent_treemap(self):
+		if self.root.input_entity.parent != None:
+			self.create_new_treemap_from(self.root.input_entity.parent)
+		else:
+			print "requested folder is over the one you started with"
+	
+	def reload_file_system(self):
+		old_root_path = self.root.input_entity.path		
+		new_root_entity = filesystemloader.load(self.very_root_entity.path)
+		self.root = tm_element.TM_Element(new_root_entity)
+		
+		elements = [self.root]
+		while not len(elements) == 0:
+			current = elements[0]
+			elements.remove(current)
+			if current.input_entity.path == old_root_path:
+				self.create_new_treemap_from(current.input_entity)
+				elements = []
+			else:
+				elements.extend(current.children)
+		

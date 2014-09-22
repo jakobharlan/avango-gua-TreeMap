@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import filesystemloader
 from treemap import Treemap
+import treemap_tutorial
 from controller import Navigator, KeyController
 from picker import Picker, FocusUpdater
 from Text import TextField
@@ -70,6 +71,7 @@ def start():
 	# graph.Root.value.Children.value.append(TMtest)
 
 	## Setup visualization-------------------
+	print treemap_tutorial.create_tutorial()
 	root = filesystemloader.load(sys.argv[1])
 	TM = Treemap()
 	TM.my_constructor(root)
@@ -82,7 +84,7 @@ def start():
 	text = TextField()
 	text_transform = avango.gua.nodes.TransformNode( Name = "text_transform",
 												 # Transform = avango.gua.make_trans_mat(0.1 * (-0.8 / 2.5), 0.1 *(-0.4 / 2.5), -0.1) * avango.gua.make_scale_mat(0.03 * 0.1/2.5))
-												 Transform = avango.gua.make_trans_mat(0.1 * (-0.8 / 2.5),  0.1 *(-0.42 / 2.5), -0.101) * avango.gua.make_scale_mat(0.02 * 0.1/2.5) )
+												 Transform = avango.gua.make_trans_mat(0.01 * (-0.8 / 2.5),  0.01 *(-0.42 / 2.5), -0.0101) * avango.gua.make_scale_mat(0.002 * 0.1/2.5) )
 	eye.Children.value.append(text_transform)
 	text.my_constructor(text_transform)
 	text.sf_text.connect_from(TM.Focuspath)
@@ -104,7 +106,7 @@ def start():
 
 	navigator.setPicker(TM_Picker)
 
-	## Fucus Updater
+	## Focus Updater
 	focuser = FocusUpdater()
 	focuser.setTreeMap(TM)
 	focuser.Results.connect_from(TM_Picker.Results)
@@ -166,7 +168,7 @@ def start():
 		Color = avango.gua.Color(1,1,1),
 		Transform = avango.gua.make_trans_mat(0, 3, 0) * avango.gua.make_scale_mat(5),
 		# EnableSpecularShading = False,
-		EnableShadows = True
+		# EnableShadows = True
 	)
 	graph.Root.value.Children.value.append(light)
 

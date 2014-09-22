@@ -160,10 +160,14 @@ class KeyController(avango.script.Script):
 		self.KeyE = False
 		self.KeyV = False
 		self.KeyC = False
+		self.KeyX = False
+		self.KeyY = False
 		self.ShowFiles = False
 
 		self.KeyUp = False
 		self.KeyDown = False
+		self.KeyLeft = False
+		self.KeyRight = False
 
 	def setTreeMap(self, TreeMap):
 		self.TM = TreeMap
@@ -191,24 +195,39 @@ class KeyController(avango.script.Script):
 		self.KeyF = self.Keyboard.KeyF.value
 
 		if self.Keyboard.KeyR.value and not self.KeyR:
-			if self.ShowFiles:
-				self.TM.show_files_under_focus()
-				self.TM.clear_scenegraph_structure()
-				self.TM.create_scenegraph_structure(ShowFiles = self.ShowFiles)
+			self.TM.show_files_under_focus()
+			self.TM.clear_scenegraph_structure()
+			self.TM.create_scenegraph_structure()
 		self.KeyR = self.Keyboard.KeyR.value
 
 		if self.Keyboard.KeyV.value and not self.KeyV:
-			self.TM.create_new_treemap_from(self.TM.focus_element)
+			self.TM.create_new_treemap_from(self.TM.focus_element.input_entity)
 		self.KeyV = self.Keyboard.KeyV.value
 
 		if self.Keyboard.KeyC.value and not self.KeyC:
 			self.TM.remove_focus_element()
 		self.KeyC = self.Keyboard.KeyC.value
 
+		if self.Keyboard.KeyLeft.value and not self.KeyLeft:
+			self.TM.select_prev_element()
+		self.KeyLeft = self.Keyboard.KeyLeft.value
+
+		if self.Keyboard.KeyRight.value and not self.KeyRight:
+			self.TM.select_next_element()
+		self.KeyRight = self.Keyboard.KeyRight.value
+
 		if self.Keyboard.KeyDown.value and not self.KeyDown:
-			self.TM.focus_parent()
+			self.TM.focus_down_at_selected_element()
 		self.KeyDown = self.Keyboard.KeyDown.value
 
 		if self.Keyboard.KeyUp.value and not self.KeyUp:
-			self.TM.focus_child()
+			self.TM.focus_level_up()
 		self.KeyUp = self.Keyboard.KeyUp.value
+
+		if self.Keyboard.KeyX.value and not self.KeyX:
+			self.TM.create_parent_treemap()
+		self.KeyX = self.Keyboard.KeyX.value
+
+		if self.Keyboard.KeyY.value and not self.KeyY:
+			self.TM.reload_file_system()
+		self.KeyY = self.Keyboard.KeyY.value

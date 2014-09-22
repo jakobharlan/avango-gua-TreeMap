@@ -43,5 +43,6 @@ class FocusUpdater(avango.script.Script):
   @field_has_changed(Results)
   def update_pickresults(self):
     if len(self.Results.value) > 0:
+      pass
       node = self.Results.value[0].Object.value
       self.treemap.focus(node)
