@@ -21,6 +21,7 @@ class Treemap(avango.script.Script):
 		self.super(Treemap).__init__()
 		avango.gua.load_materials_from("data/materials")
 		avango.gua.load_materials_from("data/materials/font")
+		self.focus_active = True
 
 	def my_constructor(self, root):
 		self.root = tm_element.TM_Element(root)
@@ -109,19 +110,20 @@ class Treemap(avango.script.Script):
 			elements.extend(current.children)
 
 	def focus(self, selector):
-		if selector.__class__ == tm_element.TM_Element:
-			self.focus_element.highlight(False)
-			self.focus_element = selector
-			self.Focuspath.value = self.focus_element.input_entity.path
-			self.focus_element.highlight(True)
-		else:
-			current = self.elementdict[selector.Name.value]
-			if not current == self.picked_element:
+		if self.focus_active:
+			if selector.__class__ == tm_element.TM_Element:
 				self.focus_element.highlight(False)
-				self.picked_element = current
-				self.focus_element = current 
+				self.focus_element = selector
 				self.Focuspath.value = self.focus_element.input_entity.path
 				self.focus_element.highlight(True)
+			else:
+				current = self.elementdict[selector.Name.value]
+				if not current == self.picked_element:
+					self.focus_element.highlight(False)
+					self.picked_element = current
+					self.focus_element = current 
+					self.Focuspath.value = self.focus_element.input_entity.path
+					self.focus_element.highlight(True)
 
 	def focus_child(self):
 		current = self.picked_element

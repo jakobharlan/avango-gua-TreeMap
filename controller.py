@@ -49,6 +49,8 @@ class Navigator(avango.script.Script):
 		self.controller2D.setPicker(self.Picker)
 		self.controller3D.setPicker(self.Picker)
 
+	def setTreeMap(self, TreeMap):
+		self.TM = TreeMap
 
 	@field_has_changed(modus)
 	def update_mode(self):
@@ -131,17 +133,21 @@ class Navigator(avango.script.Script):
 				self.last_modus.value = self.modus.value
 				if self.modus.value == 0:
 					self.modus.value = 1
+					self.TM.focus_active = True
 					print "3D"
 				else:
 					self.modus.value = 0
+					self.TM.focus_active = True
 					print "2D"
 			elif self.Keyboard.KeyALT.value and not self.KeyALT:
 				self.last_modus.value = self.modus.value
 				if self.modus.value == 0 or self.modus.value == 1:
 					self.modus.value = 2
+					self.TM.focus_active = False
 					print "overview"
 				else:
 					self.modus.value = 0
+					self.TM.focus_active = True
 					print "2D"
 			self.KeySTRG = self.Keyboard.KeySTRG.value
 			self.KeyALT = self.Keyboard.KeyALT.value

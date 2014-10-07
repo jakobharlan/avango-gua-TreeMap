@@ -57,8 +57,8 @@ def start():
 		EnableSsao = True,
 		SsaoIntensity = 0.5,
 		LeftResolution = size,
-		EnableRayDisplay = True,
-		EnableFPSDisplay = True,
+		EnableRayDisplay = False,
+		EnableFPSDisplay = False,
 		EnableBackfaceCulling = False,
 		NearClip = 0.0001
 	)
@@ -95,6 +95,7 @@ def start():
 
 	navigator = Navigator()
 	eye.Transform.connect_from(navigator.OutTransform)
+	navigator.setTreeMap(TM)
 
 	TM_Picker = Picker()
 	TM_Picker.PickedSceneGraph.value = graph
@@ -103,6 +104,18 @@ def start():
 														 avango.gua.make_scale_mat(0.00001, 0.00001, 5)
 	eye.Children.value.append(pick_ray)
 	TM_Picker.Ray.value = pick_ray
+
+
+	loader = avango.gua.nodes.TriMeshLoader()
+	crosshair = loader.create_geometry_from_file(
+		"crosshair",
+		"data/objects/cube.obj",
+		"data/materials/Grey_bright.gmd",
+		avango.gua.LoaderFlags.DEFAULTS,
+	)
+	crosshair.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, -0.005) * \
+														 avango.gua.make_scale_mat(0.00001)
+	eye.Children.value.append(crosshair)
 
 	navigator.setPicker(TM_Picker)
 
@@ -168,7 +181,7 @@ def start():
 		Color = avango.gua.Color(1,1,1),
 		Transform = avango.gua.make_trans_mat(0, 3, 0) * avango.gua.make_scale_mat(5),
 		# EnableSpecularShading = False,
-		# EnableShadows = True
+		EnableShadows = False
 	)
 	graph.Root.value.Children.value.append(light)
 
