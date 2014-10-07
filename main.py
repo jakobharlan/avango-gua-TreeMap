@@ -54,7 +54,7 @@ def start():
 	pipe = avango.gua.nodes.Pipeline(
 		Camera = camera,
 		Window = window,
-		EnableSsao = True,
+		EnableSsao = False,
 		SsaoIntensity = 0.5,
 		LeftResolution = size,
 		EnableRayDisplay = False,
